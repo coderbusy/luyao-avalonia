@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuYao.Avalonia.Fonts.MiSans.Regular", "LuYao.Avalonia.Fonts.MiSans.Regular\LuYao.Avalonia.Fonts.MiSans.Regular.csproj", "{CD7F88DB-CCAA-46A4-98FE-A321DAB120C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuYao.Avalonia.Fonts.MiSans.Regular", "LuYao.Avalonia.Fonts.MiSans.Regular\LuYao.Avalonia.Fonts.MiSans.Regular.csproj", "{CD7F88DB-CCAA-46A4-98FE-A321DAB120C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuYao.Avalonia.Behaviors", "LuYao.Avalonia.Behaviors\LuYao.Avalonia.Behaviors.csproj", "{218F4481-1AF2-447B-A9A7-D9A027105513}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{CD7F88DB-CCAA-46A4-98FE-A321DAB120C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD7F88DB-CCAA-46A4-98FE-A321DAB120C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD7F88DB-CCAA-46A4-98FE-A321DAB120C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{218F4481-1AF2-447B-A9A7-D9A027105513}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{218F4481-1AF2-447B-A9A7-D9A027105513}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{218F4481-1AF2-447B-A9A7-D9A027105513}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{218F4481-1AF2-447B-A9A7-D9A027105513}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
