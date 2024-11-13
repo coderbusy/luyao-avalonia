@@ -23,6 +23,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuYao.Avalonia.Demo.Desktop
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LuYao.Avalonia.Demo.iOS", "demo\LuYao.Avalonia.Demo.iOS\LuYao.Avalonia.Demo.iOS.csproj", "{5C2706A6-1D28-449D-B418-9E0919665B19}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{F55150CD-6359-4C48-855B-70BE88496EA0}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
