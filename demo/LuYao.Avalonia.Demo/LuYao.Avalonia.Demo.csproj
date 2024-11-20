@@ -24,4 +24,8 @@
     <ProjectReference Include="..\..\src\LuYao.Avalonia.Controls.FlagIcon\LuYao.Avalonia.Controls.FlagIcon.csproj" />
     <ProjectReference Include="..\..\src\LuYao.Avalonia.Fonts.MiSans.Regular\LuYao.Avalonia.Fonts.MiSans.Regular.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\" />
+  </ItemGroup>
 </Project>

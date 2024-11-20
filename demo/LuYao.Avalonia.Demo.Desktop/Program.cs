@@ -2,6 +2,7 @@
 
 using Avalonia;
 using Avalonia.ReactiveUI;
+using LuYao.Avalonia.Fonts.MiSans.Regular;
 
 namespace LuYao.Avalonia.Demo.Desktop;
 
@@ -18,7 +19,7 @@ class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            .WithInterFont()
+            .WithMiSansRegularFont()
             .LogToTrace()
             .UseReactiveUI();
 }

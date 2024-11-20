@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="demo/LuYao.Avalonia.Demo/Views/MainView.axaml" value="demo/LuYao.Avalonia.Demo.Browser/LuYao.Avalonia.Demo.Browser.csproj" />
+        <entry key="src/LuYao.Avalonia.Controls.FlagIcon/Controls/FlagIcon.axaml" value="demo/LuYao.Avalonia.Demo.Desktop/LuYao.Avalonia.Demo.Desktop.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

@@ -7,7 +7,7 @@ using System;
 
 namespace LuYao.Avalonia.Controls;
 
-public class FlagIcon : global::Avalonia.Controls.Image
+public class FlagIcon : Image
 {
     public FlagIcon()
     {
