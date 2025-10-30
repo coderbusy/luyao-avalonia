@@ -85,6 +85,7 @@ public class VirtualizingWrapPanel : VirtualizingPanel
 
     // Cache for calculated layout information
     private readonly List<LayoutInfo> _layoutCache = new();
+    private readonly Dictionary<object, int> _itemIndexCache = new();
     private double _lastAvailableWidth = 0;
     private int _lastItemCount = 0;
 
@@ -121,10 +122,23 @@ public class VirtualizingWrapPanel : VirtualizingPanel
             CalculateLayout(panelWidth, itemWidth, itemHeight, itemCount);
             _lastAvailableWidth = panelWidth;
             _lastItemCount = itemCount;
+            
+            // TODO: Optimize index cache rebuild - only update when Items collection changes
+            // Currently rebuilds on any layout invalidation; consider tracking collection changes
+            _itemIndexCache.Clear();
+            for (int i = 0; i < items.Count; i++)
+            {
+                var item = items[i];
+                if (item != null)
+                {
+                    _itemIndexCache[item] = i;
+                }
+            }
         }
 
-        // For now, measure all children (will add proper virtualization later)
-        // This is a simplified implementation to get the basic panel working
+        // TODO: Implement proper virtualization - only measure visible items
+        // Currently measures all children for MVP; needs optimization for >1000 items
+        // Future: Get viewport info and only measure items in visible range + buffer
         foreach (var child in Children)
         {
             if (child is Control control)
@@ -138,8 +152,10 @@ public class VirtualizingWrapPanel : VirtualizingPanel
                 }
                 else
                 {
-                    // Fallback for items not in cache
-                    control.Measure(new Size(itemWidth, itemHeight));
+                    // Fallback for items not in cache - check if it's a break line item
+                    var isBreakLine = GetIsBreakLine(control);
+                    var width = isBreakLine ? panelWidth : itemWidth;
+                    control.Measure(new Size(width, itemHeight));
                 }
             }
         }
@@ -302,14 +318,25 @@ public class VirtualizingWrapPanel : VirtualizingPanel
 
     private int GetItemIndex(object? item)
     {
+        if (item == null)
+            return -1;
+
+        // Try cache first
+        if (_itemIndexCache.TryGetValue(item, out var cachedIndex))
+            return cachedIndex;
+
+        // Fallback to linear search if not in cache
         var items = Items;
-        if (items == null || item == null)
+        if (items == null)
             return -1;
 
         for (int i = 0; i < items.Count; i++)
         {
             if (Equals(items[i], item))
+            {
+                _itemIndexCache[item] = i;
                 return i;
+            }
         }
         return -1;
     }

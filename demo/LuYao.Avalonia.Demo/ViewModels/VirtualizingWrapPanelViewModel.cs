@@ -18,7 +18,7 @@ public class VirtualizingWrapPanelViewModel : ViewModelBase
             {
                 Index = i,
                 Text = $"Item {i}",
-                IsBreakLine = (i + 1) % 10 == 0 // Every 10th item is a break line
+                IsBreakLine = (i + 1) % 10 == 0 // Items 9, 19, 29, etc. (every 10th item in 0-based indexing)
             });
         }
     }
