@@ -15,11 +15,14 @@
     </Design.DataContext>
     
     <Grid RowDefinitions="Auto,*">
-        <TextBlock Grid.Row="0" 
-                   Margin="10"
-                   FontSize="16"
-                   FontWeight="Bold"
-                   Text="VirtualizingWrapPanel Demo" />
+        <StackPanel Grid.Row="0" Margin="10" Spacing="5">
+            <TextBlock FontSize="16"
+                       FontWeight="Bold"
+                       Text="VirtualizingWrapPanel Demo" />
+            <TextBlock FontSize="12"
+                       Foreground="Gray"
+                       Text="{Binding ItemCount, StringFormat='Total Items: {0:N0} (only visible items are rendered)'}" />
+        </StackPanel>
         
         <ScrollViewer Grid.Row="1">
             <ItemsControl ItemsSource="{Binding Items}">
@@ -43,7 +46,7 @@
                                            FontWeight="Bold"
                                            HorizontalAlignment="Center"
                                            Foreground="White" />
-                                <TextBlock Text="{Binding Index, StringFormat='Item #{0}'}"
+                                <TextBlock Text="{Binding Index, StringFormat='#{0}'}"
                                            FontSize="10"
                                            HorizontalAlignment="Center"
                                            Foreground="White" />

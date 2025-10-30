@@ -5,14 +5,22 @@ namespace LuYao.Avalonia.Demo.ViewModels;
 
 public class VirtualizingWrapPanelViewModel : ViewModelBase
 {
+    private int _itemCount = 10000;
+    
     public ObservableCollection<ItemViewModel> Items { get; }
+
+    public int ItemCount
+    {
+        get => _itemCount;
+        set => this.RaiseAndSetIfChanged(ref _itemCount, value);
+    }
 
     public VirtualizingWrapPanelViewModel()
     {
         Items = new ObservableCollection<ItemViewModel>();
         
-        // Create sample items
-        for (int i = 0; i < 1000; i++)
+        // Create sample items - testing with large dataset for virtualization
+        for (int i = 0; i < ItemCount; i++)
         {
             Items.Add(new ItemViewModel
             {
