@@ -123,26 +123,23 @@ public class VirtualizingWrapPanel : VirtualizingPanel
             _lastItemCount = itemCount;
         }
 
-        // Get visible range
-        var viewport = GetViewportInfo();
-        var visibleRange = GetVisibleRange(viewport);
-
-        // Realize visible items
-        var generator = ItemContainerGenerator;
-        if (generator != null && visibleRange.count > 0)
+        // For now, measure all children (will add proper virtualization later)
+        // This is a simplified implementation to get the basic panel working
+        foreach (var child in Children)
         {
-            // Measure items in the visible range
-            for (int i = visibleRange.start; i < visibleRange.start + visibleRange.count && i < itemCount; i++)
+            if (child is Control control)
             {
-                var container = generator.ContainerFromIndex(i);
-                if (container != null && container is Control control)
+                var index = GetItemIndex(control.DataContext);
+                if (index >= 0 && index < _layoutCache.Count)
                 {
-                    if (i < _layoutCache.Count)
-                    {
-                        var layoutInfo = _layoutCache[i];
-                        var size = new Size(layoutInfo.Bounds.Width, layoutInfo.Bounds.Height);
-                        control.Measure(size);
-                    }
+                    var layoutInfo = _layoutCache[index];
+                    var size = new Size(layoutInfo.Bounds.Width, layoutInfo.Bounds.Height);
+                    control.Measure(size);
+                }
+                else
+                {
+                    // Fallback for items not in cache
+                    control.Measure(new Size(itemWidth, itemHeight));
                 }
             }
         }
