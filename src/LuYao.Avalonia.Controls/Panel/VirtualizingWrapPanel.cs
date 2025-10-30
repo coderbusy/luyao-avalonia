@@ -11,97 +11,84 @@ using System.Linq;
 namespace LuYao.Avalonia.Controls;
 
 /// <summary>
-/// A virtualizing wrap panel that supports vertical scrolling and the IsBreakLine attached property.
+/// A virtualizing wrap panel that supports both horizontal and vertical orientations.
 /// Only renders items in the visible viewport plus a buffer zone for improved performance.
 /// </summary>
 public class VirtualizingWrapPanel : VirtualizingPanel
 {
-    private const double DefaultItemWidth = 100;
-    private const double DefaultItemHeight = 100;
-    
     /// <summary>
-    /// Defines the <see cref="ItemWidth"/> property.
+    /// Defines the <see cref="Orientation"/> property.
     /// </summary>
-    public static readonly StyledProperty<double> ItemWidthProperty =
-        AvaloniaProperty.Register<VirtualizingWrapPanel, double>(
-            nameof(ItemWidth), 
-            DefaultItemWidth,
-            coerce: CoerceItemSize);
+    public static readonly StyledProperty<Orientation> OrientationProperty =
+        AvaloniaProperty.Register<VirtualizingWrapPanel, Orientation>(
+            nameof(Orientation),
+            Orientation.Vertical);
 
     /// <summary>
-    /// Defines the <see cref="ItemHeight"/> property.
+    /// Defines the <see cref="ItemSize"/> property.
     /// </summary>
-    public static readonly StyledProperty<double> ItemHeightProperty =
-        AvaloniaProperty.Register<VirtualizingWrapPanel, double>(
-            nameof(ItemHeight), 
-            DefaultItemHeight,
-            coerce: CoerceItemSize);
+    public static readonly StyledProperty<Size> ItemSizeProperty =
+        AvaloniaProperty.Register<VirtualizingWrapPanel, Size>(
+            nameof(ItemSize),
+            default(Size));
 
     /// <summary>
-    /// Defines the IsBreakLine attached property.
-    /// When true, the item will occupy the full width of the panel.
+    /// Defines the <see cref="StretchItems"/> property.
     /// </summary>
-    public static readonly AttachedProperty<bool> IsBreakLineProperty =
-        AvaloniaProperty.RegisterAttached<VirtualizingWrapPanel, Control, bool>("IsBreakLine");
+    public static readonly StyledProperty<bool> StretchItemsProperty =
+        AvaloniaProperty.Register<VirtualizingWrapPanel, bool>(
+            nameof(StretchItems),
+            false);
 
     /// <summary>
-    /// Gets or sets the width of each item in the panel.
+    /// Gets or sets the orientation in which items are arranged before wrapping.
+    /// The default value is Vertical.
     /// </summary>
-    public double ItemWidth
+    public Orientation Orientation
     {
-        get => GetValue(ItemWidthProperty);
-        set => SetValue(ItemWidthProperty, value);
+        get => GetValue(OrientationProperty);
+        set => SetValue(OrientationProperty, value);
     }
 
     /// <summary>
-    /// Gets or sets the height of each item in the panel.
+    /// Gets or sets the size of the items. The default value is Size.Empty.
+    /// If the value is Size.Empty, the item size is determined by measuring the first realized item.
     /// </summary>
-    public double ItemHeight
+    public Size ItemSize
     {
-        get => GetValue(ItemHeightProperty);
-        set => SetValue(ItemHeightProperty, value);
+        get => GetValue(ItemSizeProperty);
+        set => SetValue(ItemSizeProperty, value);
     }
 
     /// <summary>
-    /// Gets the IsBreakLine attached property value for a control.
+    /// Gets or sets whether items get stretched to fill up remaining space.
+    /// The default value is false.
     /// </summary>
-    public static bool GetIsBreakLine(Control control)
+    public bool StretchItems
     {
-        return control.GetValue(IsBreakLineProperty);
-    }
-
-    /// <summary>
-    /// Sets the IsBreakLine attached property value for a control.
-    /// </summary>
-    public static void SetIsBreakLine(Control control, bool value)
-    {
-        control.SetValue(IsBreakLineProperty, value);
-    }
-
-    private static double CoerceItemSize(AvaloniaObject obj, double value)
-    {
-        return Math.Max(1, value);
+        get => GetValue(StretchItemsProperty);
+        set => SetValue(StretchItemsProperty, value);
     }
 
     // Cache for calculated layout information
     private readonly List<LayoutInfo> _layoutCache = new();
     private readonly Dictionary<object, int> _itemIndexCache = new();
     private double _lastAvailableWidth = 0;
+    private double _lastAvailableHeight = 0;
     private int _lastItemCount = 0;
-    private double _lastScrollOffset = -1;
     private readonly HashSet<int> _realizedIndexes = new();
     private ScrollViewer? _scrollViewer;
+    private Size _measuredItemSize = default(Size);
 
     private class LayoutInfo
     {
         public int ItemIndex { get; set; }
         public Rect Bounds { get; set; }
-        public bool IsBreakLine { get; set; }
     }
 
     static VirtualizingWrapPanel()
     {
-        AffectsMeasure<VirtualizingWrapPanel>(ItemWidthProperty, ItemHeightProperty);
+        AffectsMeasure<VirtualizingWrapPanel>(OrientationProperty, ItemSizeProperty, StretchItemsProperty);
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -163,22 +150,47 @@ public class VirtualizingWrapPanel : VirtualizingPanel
             return new Size(0, 0);
         }
 
-        var itemWidth = ItemWidth;
-        var itemHeight = ItemHeight;
-        var panelWidth = double.IsInfinity(availableSize.Width) ? itemWidth * 4 : availableSize.Width;
+        // Determine item size
+        var itemSize = ItemSize;
+        if (itemSize.Width == 0 || itemSize.Height == 0)
+        {
+            // Measure first item to determine size
+            if (_measuredItemSize == default(Size) && items.Count > 0)
+            {
+                var firstContainer = GetOrCreateContainer(items[0], 0);
+                if (firstContainer != null)
+                {
+                    firstContainer.Measure(availableSize);
+                    _measuredItemSize = firstContainer.DesiredSize;
+                }
+            }
+            itemSize = _measuredItemSize != default(Size) ? _measuredItemSize : new Size(100, 100);
+        }
+
+        var orientation = Orientation;
+        var isVertical = orientation == Orientation.Vertical;
+        var itemCount = items.Count;
+        
+        // Determine panel constraint
+        var panelSize = isVertical 
+            ? (double.IsInfinity(availableSize.Width) ? itemSize.Width * 4 : availableSize.Width)
+            : (double.IsInfinity(availableSize.Height) ? itemSize.Height * 4 : availableSize.Height);
         
         // Calculate layout if needed
-        var itemCount = items.Count;
-        if (_layoutCache.Count == 0 || 
-            Math.Abs(_lastAvailableWidth - panelWidth) > 0.01 || 
-            _lastItemCount != itemCount)
+        var needsLayout = _layoutCache.Count == 0 
+            || Math.Abs((isVertical ? _lastAvailableWidth : _lastAvailableHeight) - panelSize) > 0.01
+            || _lastItemCount != itemCount;
+            
+        if (needsLayout)
         {
-            CalculateLayout(panelWidth, itemWidth, itemHeight, itemCount);
-            _lastAvailableWidth = panelWidth;
+            CalculateLayout(panelSize, itemSize, itemCount, isVertical);
+            if (isVertical)
+                _lastAvailableWidth = panelSize;
+            else
+                _lastAvailableHeight = panelSize;
             _lastItemCount = itemCount;
             
-            // TODO: Optimize index cache rebuild - only update when Items collection changes
-            // Currently rebuilds on any layout invalidation; consider tracking collection changes
+            // Rebuild item index cache
             _itemIndexCache.Clear();
             for (int i = 0; i < items.Count; i++)
             {
@@ -192,13 +204,7 @@ public class VirtualizingWrapPanel : VirtualizingPanel
 
         // Get viewport info for virtualization
         var viewport = GetViewportInfo();
-        var visibleRange = GetVisibleRange(viewport);
-
-        // Check if scroll offset changed significantly
-        if (Math.Abs(_lastScrollOffset - viewport.offset) > 1.0)
-        {
-            _lastScrollOffset = viewport.offset;
-        }
+        var visibleRange = GetVisibleRange(viewport, isVertical);
 
         // Track which indexes should be realized
         var targetIndexes = new HashSet<int>();
@@ -246,11 +252,14 @@ public class VirtualizingWrapPanel : VirtualizingPanel
         if (_layoutCache.Count > 0)
         {
             var lastItem = _layoutCache[_layoutCache.Count - 1];
-            var totalHeight = lastItem.Bounds.Bottom;
-            return new Size(panelWidth, totalHeight);
+            return isVertical 
+                ? new Size(panelSize, lastItem.Bounds.Bottom)
+                : new Size(lastItem.Bounds.Right, panelSize);
         }
 
-        return new Size(panelWidth, 0);
+        return isVertical 
+            ? new Size(panelSize, 0)
+            : new Size(0, panelSize);
     }
 
     private Control? GetOrCreateContainer(object? item, int index)
@@ -310,85 +319,63 @@ public class VirtualizingWrapPanel : VirtualizingPanel
         return finalSize;
     }
 
-    private void CalculateLayout(double panelWidth, double itemWidth, double itemHeight, int itemCount)
+    private void CalculateLayout(double panelSize, Size itemSize, int itemCount, bool isVertical)
     {
         _layoutCache.Clear();
 
-        var itemsPerRow = Math.Max(1, (int)(panelWidth / itemWidth));
-        var currentX = 0.0;
-        var currentY = 0.0;
-        var currentRowHeight = itemHeight;
-
-        for (int i = 0; i < itemCount; i++)
+        if (isVertical)
         {
-            var isBreakLine = IsItemBreakLine(i);
+            // Vertical orientation: items flow left-to-right, then wrap to next row
+            var itemsPerRow = Math.Max(1, (int)(panelSize / itemSize.Width));
+            var currentX = 0.0;
+            var currentY = 0.0;
 
-            if (isBreakLine)
+            for (int i = 0; i < itemCount; i++)
             {
-                // Break line item occupies full width
-                if (currentX > 0)
-                {
-                    // Move to next row if not at start of row
-                    currentY += currentRowHeight;
-                    currentX = 0;
-                    currentRowHeight = itemHeight;
-                }
-
-                _layoutCache.Add(new LayoutInfo
-                {
-                    ItemIndex = i,
-                    Bounds = new Rect(0, currentY, panelWidth, itemHeight),
-                    IsBreakLine = true
-                });
-
-                currentY += itemHeight;
-                currentX = 0;
-                currentRowHeight = itemHeight;
-            }
-            else
-            {
-                // Normal item
-                if (currentX + itemWidth > panelWidth && currentX > 0)
+                if (currentX + itemSize.Width > panelSize && currentX > 0)
                 {
                     // Move to next row
-                    currentY += currentRowHeight;
+                    currentY += itemSize.Height;
                     currentX = 0;
-                    currentRowHeight = itemHeight;
                 }
 
                 _layoutCache.Add(new LayoutInfo
                 {
                     ItemIndex = i,
-                    Bounds = new Rect(currentX, currentY, itemWidth, itemHeight),
-                    IsBreakLine = false
+                    Bounds = new Rect(currentX, currentY, itemSize.Width, itemSize.Height)
                 });
 
-                currentX += itemWidth;
+                currentX += itemSize.Width;
             }
         }
-    }
-
-    private bool IsItemBreakLine(int index)
-    {
-        var items = Items;
-        if (items == null) return false;
-
-        var item = items.ElementAtOrDefault(index);
-        if (item == null) return false;
-
-        // Check if we have a realized control for this item
-        foreach (var child in Children)
+        else
         {
-            if (child is Control control && control.DataContext == item)
+            // Horizontal orientation: items flow top-to-bottom, then wrap to next column
+            var itemsPerColumn = Math.Max(1, (int)(panelSize / itemSize.Height));
+            var currentX = 0.0;
+            var currentY = 0.0;
+
+            for (int i = 0; i < itemCount; i++)
             {
-                return GetIsBreakLine(control);
+                if (currentY + itemSize.Height > panelSize && currentY > 0)
+                {
+                    // Move to next column
+                    currentX += itemSize.Width;
+                    currentY = 0;
+                }
+
+                _layoutCache.Add(new LayoutInfo
+                {
+                    ItemIndex = i,
+                    Bounds = new Rect(currentX, currentY, itemSize.Width, itemSize.Height)
+                });
+
+                currentY += itemSize.Height;
             }
         }
-
-        return false;
     }
 
-    private (int start, int count) GetVisibleRange(in (double offset, double viewport) viewportInfo)
+    private (int start, int count) GetVisibleRange(in (double offset, double viewport) viewportInfo, bool isVertical)
     {
         if (_layoutCache.Count == 0)
             return (0, 0);
@@ -397,7 +384,7 @@ public class VirtualizingWrapPanel : VirtualizingPanel
         var start = -1;
         var end = -1;
 
-        // Add buffer zone (one viewport above and below)
+        // Add buffer zone (one viewport above/below or left/right)
         var bufferZone = viewport;
         var visibleStart = Math.Max(0, offset - bufferZone);
         var visibleEnd = offset + viewport + bufferZone;
@@ -406,10 +393,10 @@ public class VirtualizingWrapPanel : VirtualizingPanel
         for (int i = 0; i < _layoutCache.Count; i++)
         {
             var layoutInfo = _layoutCache[i];
-            var itemTop = layoutInfo.Bounds.Top;
-            var itemBottom = layoutInfo.Bounds.Bottom;
+            var itemStart = isVertical ? layoutInfo.Bounds.Top : layoutInfo.Bounds.Left;
+            var itemEnd = isVertical ? layoutInfo.Bounds.Bottom : layoutInfo.Bounds.Right;
 
-            if (itemBottom >= visibleStart && itemTop <= visibleEnd)
+            if (itemEnd >= visibleStart && itemStart <= visibleEnd)
             {
                 if (start == -1)
                     start = i;
@@ -428,7 +415,10 @@ public class VirtualizingWrapPanel : VirtualizingPanel
         var scrollViewer = this.FindAncestorOfType<ScrollViewer>();
         if (scrollViewer != null)
         {
-            return (scrollViewer.Offset.Y, scrollViewer.Viewport.Height);
+            var isVertical = Orientation == Orientation.Vertical;
+            return isVertical 
+                ? (scrollViewer.Offset.Y, scrollViewer.Viewport.Height)
+                : (scrollViewer.Offset.X, scrollViewer.Viewport.Width);
         }
         return (0, double.PositiveInfinity);
     }

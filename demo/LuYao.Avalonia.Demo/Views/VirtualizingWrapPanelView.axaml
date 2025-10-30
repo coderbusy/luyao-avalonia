@@ -1,62 +1,57 @@
 <UserControl
-x:Class="LuYao.Avalonia.Demo.Views.VirtualizingWrapPanelView"
-xmlns="https://github.com/avaloniaui"
-xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-xmlns:ly="using:LuYao.Avalonia.Controls"
-xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-xmlns:vm="clr-namespace:LuYao.Avalonia.Demo.ViewModels"
-d:DesignHeight="600"
-d:DesignWidth="800"
-x:DataType="vm:VirtualizingWrapPanelViewModel"
-mc:Ignorable="d">
-	<Design.DataContext>
-		<vm:VirtualizingWrapPanelViewModel />
-	</Design.DataContext>
-
-	<Grid RowDefinitions="Auto,*">
-		<TextBlock Grid.Row="0"
-				   Margin="10"
-				   FontSize="16"
-				   FontWeight="Bold"
-				   Text="VirtualizingWrapPanel Demo" />
-
-		<ScrollViewer Grid.Row="1">
-			<ItemsControl ItemsSource="{Binding Items}">
-				<ItemsControl.Styles>
-					<Style x:DataType="vm:ItemViewModel" Selector="ContentPresenter">
-						<Setter Property="ly:VirtualizingWrapPanel.IsBreakLine" Value="{Binding IsBreakLine}" />
-					</Style>
-				</ItemsControl.Styles>
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<ly:VirtualizingWrapPanel ItemWidth="150"
-												  ItemHeight="100" />
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<Border Background="{DynamicResource SystemAccentColor}"
-								BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
-								BorderThickness="1"
-								CornerRadius="4">
-							<StackPanel VerticalAlignment="Center"
-										HorizontalAlignment="Center">
-								<TextBlock Text="{Binding Text}"
-										   FontSize="14"
-										   FontWeight="Bold"
-										   HorizontalAlignment="Center"
-										   Foreground="White" />
-								<TextBlock Text="{Binding IsBreakLine, StringFormat='Break Line: {0}'}"
-										   FontSize="10"
-										   HorizontalAlignment="Center"
-										   Foreground="White" />
-							</StackPanel>
-						</Border>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ItemsControl>
-		</ScrollViewer>
-	</Grid>
+    x:Class="LuYao.Avalonia.Demo.Views.VirtualizingWrapPanelView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ly="using:LuYao.Avalonia.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:LuYao.Avalonia.Demo.ViewModels"
+    d:DesignHeight="600"
+    d:DesignWidth="800"
+    x:DataType="vm:VirtualizingWrapPanelViewModel"
+    mc:Ignorable="d">
+    <Design.DataContext>
+        <vm:VirtualizingWrapPanelViewModel />
+    </Design.DataContext>
+    
+    <Grid RowDefinitions="Auto,*">
+        <TextBlock Grid.Row="0" 
+                   Margin="10"
+                   FontSize="16"
+                   FontWeight="Bold"
+                   Text="VirtualizingWrapPanel Demo" />
+        
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl ItemsSource="{Binding Items}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ly:VirtualizingWrapPanel ItemSize="150, 100" 
+                                                  Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{DynamicResource SystemAccentColor}"
+                                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                BorderThickness="1"
+                                CornerRadius="4">
+                            <StackPanel VerticalAlignment="Center"
+                                        HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding Text}"
+                                           FontSize="14"
+                                           FontWeight="Bold"
+                                           HorizontalAlignment="Center"
+                                           Foreground="White" />
+                                <TextBlock Text="{Binding Index, StringFormat='Item #{0}'}"
+                                           FontSize="10"
+                                           HorizontalAlignment="Center"
+                                           Foreground="White" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

@@ -1,15 +1,15 @@
 # VirtualizingWrapPanel
 
-A high-performance virtualizing wrap panel for Avalonia that supports vertical scrolling with an `IsBreakLine` attached property.
+A high-performance virtualizing wrap panel for Avalonia that supports both horizontal and vertical orientations with efficient memory usage.
 
 ## Features
 
 - **Virtualization Support**: Only renders items in the visible viewport plus a buffer zone for optimal performance
-- **Fixed Item Size**: Requires `ItemWidth` and `ItemHeight` for consistent layout calculation
-- **IsBreakLine Property**: Supports full-width items via the `IsBreakLine` attached property
-- **Vertical Scrolling**: Optimized for vertical scroll scenarios with large data sets
+- **Dual Orientation**: Supports both `Vertical` (default) and `Horizontal` orientations
+- **Flexible Item Sizing**: Use `ItemSize` property or let the panel measure the first item
 - **ItemsControl Integration**: Works seamlessly with Avalonia's ItemsControl
 - **ScrollIntoView Support**: Allows programmatic scrolling to specific items
+- **Stretch Support**: Optional item stretching to fill available space
 
 ## Installation
 
@@ -23,8 +23,8 @@ Add a reference to the `LuYao.Avalonia.Controls` project in your application.
 <ItemsControl ItemsSource="{Binding Items}">
     <ItemsControl.ItemsPanel>
         <ItemsPanelTemplate>
-            <ly:VirtualizingWrapPanel ItemWidth="150" 
-                                      ItemHeight="100" />
+            <ly:VirtualizingWrapPanel ItemSize="150, 100" 
+                                      Orientation="Vertical" />
         </ItemsPanelTemplate>
     </ItemsControl.ItemsPanel>
     
@@ -42,22 +42,13 @@ Add a reference to the `LuYao.Avalonia.Controls` project in your application.
 </ItemsControl>
 ```
 
-### Using IsBreakLine
+### Auto-sizing Items
 
-The `IsBreakLine` attached property allows certain items to occupy the full width of the panel:
+If you don't specify `ItemSize`, the panel will measure the first item to determine the size:
 
 ```xaml
-<ItemsControl ItemsSource="{Binding Items}">
-    <ItemsControl.ItemsPanel>
-        <ItemsPanelTemplate>
-            <ly:VirtualizingWrapPanel ItemWidth="150" 
-                                      ItemHeight="100" />
-        </ItemsPanelTemplate>
-    </ItemsControl.ItemsPanel>
-    
-    <ItemsControl.ItemTemplate>
-        <DataTemplate>
-            <Border ly:VirtualizingWrapPanel.IsBreakLine="{Binding IsHeader}"
+<ly:VirtualizingWrapPanel Orientation="Vertical" />
+```
                     Background="{Binding IsHeader, Converter={StaticResource HeaderBackgroundConverter}}">
                 <TextBlock Text="{Binding Name}" />
             </Border>
@@ -81,8 +72,7 @@ public class MyViewModel
         {
             Items.Add(new ItemViewModel
             {
-                Name = $"Item {i}",
-                IsHeader = (i % 10 == 0) // Every 10th item is a header
+                Name = $"Item {i}"
             });
         }
     }
@@ -91,72 +81,68 @@ public class MyViewModel
 public class ItemViewModel
 {
     public string Name { get; set; }
-    public bool IsHeader { get; set; }
 }
 ```
 
 ## Properties
 
-### ItemWidth
+### Orientation
 
-- **Type**: `double`
-- **Default**: 100
-- **Description**: The width of each item in the panel. Required for layout calculation.
+- **Type**: `Orientation`
+- **Default**: `Vertical`
+- **Description**: Specifies the orientation in which items are arranged before wrapping.
+  - `Vertical`: Items flow left-to-right, then wrap to next row (scrolls vertically)
+  - `Horizontal`: Items flow top-to-bottom, then wrap to next column (scrolls horizontally)
 
-### ItemHeight
+### ItemSize
 
-- **Type**: `double`
-- **Default**: 100
-- **Description**: The height of each item in the panel. Required for layout calculation.
+- **Type**: `Size`
+- **Default**: `default(Size)` (0, 0)
+- **Description**: Specifies the size of each item. If not set (or set to 0, 0), the panel will measure the first realized item to determine the size.
 
-## Attached Properties
+**Example:**
+```xaml
+<ly:VirtualizingWrapPanel ItemSize="150, 100" />
+```
 
-### IsBreakLine
+### StretchItems
 
 - **Type**: `bool`
 - **Default**: `false`
-- **Description**: When set to `true`, the item will occupy the full width of the panel and force a new row.
-
-**Usage:**
-```xaml
-<Border ly:VirtualizingWrapPanel.IsBreakLine="True">
-    <!-- Content -->
-</Border>
-```
-
-Or data-bound:
-```xaml
-<Border ly:VirtualizingWrapPanel.IsBreakLine="{Binding IsBreakLine}">
-    <!-- Content -->
-</Border>
-```
+- **Description**: When `true`, items are stretched to fill up remaining space in each row/column.
 
 ## Layout Behavior
 
-1. **Normal Items**: Items are arranged from left to right, wrapping to the next row when the panel width is exceeded
-2. **Break Line Items**: When an item has `IsBreakLine="True"`:
-   - If not at the start of a row, a new row is started
-   - The item occupies the full width of the panel
-   - The next item starts on a new row
+### Vertical Orientation (default)
+- Items are arranged from left to right
+- When a row is full, wrapping occurs to the next row below
+- Scrolling occurs vertically
+
+### Horizontal Orientation
+- Items are arranged from top to bottom
+- When a column is full, wrapping occurs to the next column to the right
+- Scrolling occurs horizontally
 
 ## Performance Considerations
 
 - **Virtualization**: The panel only creates visual elements for items in the visible viewport plus a buffer zone
-- **Fixed Size**: Items must have fixed sizes (ItemWidth and ItemHeight) for optimal performance
 - **Large Datasets**: Designed to handle thousands of items efficiently through virtualization
 - **Memory Usage**: Significantly reduces memory consumption compared to non-virtualizing panels
+- **Scroll Performance**: Automatically updates displayed items during scrolling
 
-## Current Limitations
+## API Compatibility
 
-- **Horizontal Scrolling**: Currently optimized for vertical scrolling only
-- **Variable Item Sizes**: Items must have uniform sizes (specified by ItemWidth and ItemHeight)
-- **Full Virtualization**: Element recycling is still being optimized
+This implementation follows the API design of the WPF VirtualizingWrapPanel for consistency:
+- `ItemSize` instead of separate `ItemWidth`/`ItemHeight`
+- `Orientation` property for direction control
+- Standard wrap panel behavior without custom break line logic
 
 ## Future Enhancements
 
-- Complete element recycling implementation for maximum performance
-- Support for variable item sizes
-- Horizontal orientation support
+- Element recycling pool for maximum performance
+- Support for variable item sizes via `ItemSizeProvider`
+- `SpacingMode` and `ItemAlignment` properties
+- Grid layout mode option
 - Enhanced ScrollIntoView with animation options
 - Accessibility improvements
 

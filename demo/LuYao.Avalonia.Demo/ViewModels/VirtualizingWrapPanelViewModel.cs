@@ -17,8 +17,7 @@ public class VirtualizingWrapPanelViewModel : ViewModelBase
             Items.Add(new ItemViewModel
             {
                 Index = i,
-                Text = $"Item {i}",
-                IsBreakLine = (i + 1) % 10 == 0 // Items 9, 19, 29, etc. (every 10th item in 0-based indexing)
+                Text = $"Item {i}"
             });
         }
     }
@@ -28,7 +27,6 @@ public class ItemViewModel : ReactiveObject
 {
     private int _index;
     private string _text = string.Empty;
-    private bool _isBreakLine;
 
     public int Index
     {
@@ -40,11 +38,5 @@ public class ItemViewModel : ReactiveObject
     {
         get => _text;
         set => this.RaiseAndSetIfChanged(ref _text, value);
-    }
-
-    public bool IsBreakLine
-    {
-        get => _isBreakLine;
-        set => this.RaiseAndSetIfChanged(ref _isBreakLine, value);
     }
 }
