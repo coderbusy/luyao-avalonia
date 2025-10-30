@@ -104,7 +104,9 @@ public class VirtualizingWrapPanel : VirtualizingPanel
     protected override Size MeasureOverride(Size availableSize)
     {
         var items = Items;
-        if (items == null || items.Count == 0)
+        var generator = ItemContainerGenerator;
+        
+        if (items == null || items.Count == 0 || generator == null)
         {
             return new Size(0, 0);
         }
@@ -136,27 +138,21 @@ public class VirtualizingWrapPanel : VirtualizingPanel
             }
         }
 
-        // TODO: Implement proper virtualization - only measure visible items
-        // Currently measures all children for MVP; needs optimization for >1000 items
-        // Future: Get viewport info and only measure items in visible range + buffer
-        foreach (var child in Children)
+        // Get viewport info for virtualization
+        var viewport = GetViewportInfo();
+        var visibleRange = GetVisibleRange(viewport);
+
+        // Realize elements in the visible range
+        for (int i = visibleRange.start; i < visibleRange.start + visibleRange.count && i < itemCount; i++)
         {
-            if (child is Control control)
+            var item = items[i];
+            var container = GetOrCreateContainer(item, i);
+            
+            if (container != null && i < _layoutCache.Count)
             {
-                var index = GetItemIndex(control.DataContext);
-                if (index >= 0 && index < _layoutCache.Count)
-                {
-                    var layoutInfo = _layoutCache[index];
-                    var size = new Size(layoutInfo.Bounds.Width, layoutInfo.Bounds.Height);
-                    control.Measure(size);
-                }
-                else
-                {
-                    // Fallback for items not in cache - check if it's a break line item
-                    var isBreakLine = GetIsBreakLine(control);
-                    var width = isBreakLine ? panelWidth : itemWidth;
-                    control.Measure(new Size(width, itemHeight));
-                }
+                var layoutInfo = _layoutCache[i];
+                var size = new Size(layoutInfo.Bounds.Width, layoutInfo.Bounds.Height);
+                container.Measure(size);
             }
         }
 
@@ -169,6 +165,41 @@ public class VirtualizingWrapPanel : VirtualizingPanel
         }
 
         return new Size(panelWidth, 0);
+    }
+
+    private Control? GetOrCreateContainer(object? item, int index)
+    {
+        var generator = ItemContainerGenerator;
+        if (generator == null)
+            return null;
+
+        // Check if container already exists
+        foreach (var child in Children)
+        {
+            if (child is Control control && control.DataContext == item)
+                return control;
+        }
+
+        // Create new container
+        if (generator.NeedsContainer(item, index, out var recycleKey))
+        {
+            var container = generator.CreateContainer(item, index, recycleKey);
+            generator.PrepareItemContainer(container, item, index);
+            AddInternalChild(container);
+            generator.ItemContainerPrepared(container, item, index);
+            return container;
+        }
+        else
+        {
+            // Item is its own container
+            if (item is Control itemControl)
+            {
+                AddInternalChild(itemControl);
+                return itemControl;
+            }
+        }
+
+        return null;
     }
 
     protected override Size ArrangeOverride(Size finalSize)
