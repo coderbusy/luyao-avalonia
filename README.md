@@ -62,10 +62,12 @@ dotnet add package LuYao.Avalonia.Fonts.MiSans.Regular
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="LuYao.Avalonia.Behaviors" Version="0.2.0" />
-  <PackageReference Include="LuYao.Avalonia.Fonts.MiSans.Regular" Version="0.2.0" />
+  <PackageReference Include="LuYao.Avalonia.Behaviors" Version="*" />
+  <PackageReference Include="LuYao.Avalonia.Fonts.MiSans.Regular" Version="*" />
 </ItemGroup>
 ```
+
+> **注意**: 使用 `Version="*"` 会自动获取最新版本。你也可以指定特定版本号。
 
 ### 🚀 使用示例
 
@@ -207,10 +209,12 @@ Or add to your `.csproj` file:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="LuYao.Avalonia.Behaviors" Version="0.2.0" />
-  <PackageReference Include="LuYao.Avalonia.Fonts.MiSans.Regular" Version="0.2.0" />
+  <PackageReference Include="LuYao.Avalonia.Behaviors" Version="*" />
+  <PackageReference Include="LuYao.Avalonia.Fonts.MiSans.Regular" Version="*" />
 </ItemGroup>
 ```
+
+> **Note**: Using `Version="*"` will automatically get the latest version. You can also specify a specific version number.
 
 ### 🚀 Usage Examples
 
