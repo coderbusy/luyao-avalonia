@@ -88,6 +88,9 @@ public class VirtualizingWrapPanel : VirtualizingPanel
     private readonly Dictionary<object, int> _itemIndexCache = new();
     private double _lastAvailableWidth = 0;
     private int _lastItemCount = 0;
+    private double _lastScrollOffset = -1;
+    private readonly HashSet<int> _realizedIndexes = new();
+    private ScrollViewer? _scrollViewer;
 
     private class LayoutInfo
     {
@@ -99,6 +102,55 @@ public class VirtualizingWrapPanel : VirtualizingPanel
     static VirtualizingWrapPanel()
     {
         AffectsMeasure<VirtualizingWrapPanel>(ItemWidthProperty, ItemHeightProperty);
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        UpdateScrollViewer();
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        UnsubscribeFromScrollViewer();
+    }
+
+    private void UpdateScrollViewer()
+    {
+        var newScrollViewer = this.FindAncestorOfType<ScrollViewer>();
+        if (newScrollViewer != _scrollViewer)
+        {
+            UnsubscribeFromScrollViewer();
+            _scrollViewer = newScrollViewer;
+            SubscribeToScrollViewer();
+        }
+    }
+
+    private void SubscribeToScrollViewer()
+    {
+        if (_scrollViewer != null)
+        {
+            _scrollViewer.PropertyChanged += OnScrollViewerPropertyChanged;
+        }
+    }
+
+    private void UnsubscribeFromScrollViewer()
+    {
+        if (_scrollViewer != null)
+        {
+            _scrollViewer.PropertyChanged -= OnScrollViewerPropertyChanged;
+            _scrollViewer = null;
+        }
+    }
+
+    private void OnScrollViewerPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property == ScrollViewer.OffsetProperty)
+        {
+            // Invalidate measure when scroll offset changes
+            InvalidateMeasure();
+        }
     }
 
     protected override Size MeasureOverride(Size availableSize)
@@ -142,7 +194,40 @@ public class VirtualizingWrapPanel : VirtualizingPanel
         var viewport = GetViewportInfo();
         var visibleRange = GetVisibleRange(viewport);
 
+        // Check if scroll offset changed significantly
+        if (Math.Abs(_lastScrollOffset - viewport.offset) > 1.0)
+        {
+            _lastScrollOffset = viewport.offset;
+        }
+
+        // Track which indexes should be realized
+        var targetIndexes = new HashSet<int>();
+        for (int i = visibleRange.start; i < visibleRange.start + visibleRange.count && i < itemCount; i++)
+        {
+            targetIndexes.Add(i);
+        }
+
+        // Remove containers that are no longer in the visible range
+        var childrenToRemove = new List<Control>();
+        foreach (var child in Children)
+        {
+            if (child is Control control)
+            {
+                var index = GetItemIndex(control.DataContext);
+                if (index < 0 || !targetIndexes.Contains(index))
+                {
+                    childrenToRemove.Add(control);
+                }
+            }
+        }
+
+        foreach (var child in childrenToRemove)
+        {
+            RemoveInternalChild(child);
+        }
+
         // Realize elements in the visible range
+        _realizedIndexes.Clear();
         for (int i = visibleRange.start; i < visibleRange.start + visibleRange.count && i < itemCount; i++)
         {
             var item = items[i];
@@ -150,6 +235,7 @@ public class VirtualizingWrapPanel : VirtualizingPanel
             
             if (container != null && i < _layoutCache.Count)
             {
+                _realizedIndexes.Add(i);
                 var layoutInfo = _layoutCache[i];
                 var size = new Size(layoutInfo.Bounds.Width, layoutInfo.Bounds.Height);
                 container.Measure(size);
