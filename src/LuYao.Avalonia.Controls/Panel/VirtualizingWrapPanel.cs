@@ -95,6 +95,7 @@ public class VirtualizingWrapPanel : VirtualizingPanel
     private double _lastAvailableWidth = 0;
     private double _lastAvailableHeight = 0;
     private int _lastItemCount = 0;
+    private IItemSizeProvider? _lastItemSizeProvider = null;
     private readonly HashSet<int> _realizedIndexes = new();
     private Size _measuredItemSize = default(Size);
     private Rect _viewport;
@@ -117,7 +118,7 @@ public class VirtualizingWrapPanel : VirtualizingPanel
 
     static VirtualizingWrapPanel()
     {
-        AffectsMeasure<VirtualizingWrapPanel>(OrientationProperty, ItemSizeProperty, StretchItemsProperty);
+        AffectsMeasure<VirtualizingWrapPanel>(OrientationProperty, ItemSizeProperty, StretchItemsProperty, ItemSizeProviderProperty);
     }
 
     public VirtualizingWrapPanel()
@@ -203,9 +204,11 @@ public class VirtualizingWrapPanel : VirtualizingPanel
             : (double.IsInfinity(availableSize.Height) ? itemSize.Height * 4 : availableSize.Height);
         
         // Calculate layout if needed
+        var currentSizeProvider = ItemSizeProvider;
         var needsLayout = _layoutCache.Count == 0 
             || Math.Abs((isVertical ? _lastAvailableWidth : _lastAvailableHeight) - panelSize) > 0.01
-            || _lastItemCount != itemCount;
+            || _lastItemCount != itemCount
+            || !ReferenceEquals(_lastItemSizeProvider, currentSizeProvider);
             
         if (needsLayout)
         {
@@ -215,6 +218,7 @@ public class VirtualizingWrapPanel : VirtualizingPanel
             else
                 _lastAvailableHeight = panelSize;
             _lastItemCount = itemCount;
+            _lastItemSizeProvider = currentSizeProvider;
             
             // Rebuild item index cache
             _itemIndexCache.Clear();
@@ -225,6 +229,20 @@ public class VirtualizingWrapPanel : VirtualizingPanel
                 {
                     _itemIndexCache[item] = i;
                 }
+            }
+            
+            // Clear recycling pool when layout changes significantly to ensure clean state
+            if (_recyclePool != null)
+            {
+                foreach (var pool in _recyclePool.Values)
+                {
+                    while (pool.Count > 0)
+                    {
+                        var control = pool.Pop();
+                        RemoveInternalChild(control);
+                    }
+                }
+                _recyclePool.Clear();
             }
         }
 
