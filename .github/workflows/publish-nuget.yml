@@ -1,0 +1,57 @@
+name: Publish to NuGet
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (leave empty to use version from Directory.Build.props)'
+        required: false
+        type: string
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    
+    - name: Update version if specified
+      if: ${{ github.event.inputs.version != '' }}
+      run: |
+        sed -i "s/<Version>.*<\/Version>/<Version>${{ github.event.inputs.version }}<\/Version>/" Directory.Build.props
+        echo "Updated version to ${{ github.event.inputs.version }}"
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+      
+    - name: Test
+      run: dotnet test --configuration Release --no-build --verbosity normal
+      
+    - name: Pack LuYao.Avalonia.Behaviors
+      run: dotnet pack ./src/LuYao.Avalonia.Behaviors/LuYao.Avalonia.Behaviors.csproj --configuration Release --no-build --output ./packages
+      
+    - name: Pack LuYao.Avalonia.Controls
+      run: dotnet pack ./src/LuYao.Avalonia.Controls/LuYao.Avalonia.Controls.csproj --configuration Release --no-build --output ./packages
+      
+    - name: Pack LuYao.Avalonia.Fonts.MiSans.Regular
+      run: dotnet pack ./src/LuYao.Avalonia.Fonts.MiSans.Regular/LuYao.Avalonia.Fonts.MiSans.Regular.csproj --configuration Release --no-build --output ./packages
+      
+    - name: Publish to NuGet
+      run: |
+        dotnet nuget push ./packages/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-packages
+        path: ./packages/*.nupkg
