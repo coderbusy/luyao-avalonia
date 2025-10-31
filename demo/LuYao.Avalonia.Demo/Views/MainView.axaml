@@ -53,6 +53,13 @@
                     <Image ly:FlagIcon.Code="IN" Width="30" />
                     <Image ly:FlagIcon.Code="BR" Width="22" />
                 </StackPanel>
+                
+                <TextBlock Text="Fallback to XX for unknown codes:" FontWeight="Bold" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                    <Image ly:FlagIcon.Code="INVALID" Width="50" />
+                    <Image ly:FlagIcon.Code="ZZZ" Width="50" />
+                    <Image ly:FlagIcon.Code="" Width="50" />
+                </StackPanel>
             </StackPanel>
         </TabItem>
         <TabItem Header="VirtualizingWrapPanel">
