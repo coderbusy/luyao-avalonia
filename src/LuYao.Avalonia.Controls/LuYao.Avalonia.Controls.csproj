@@ -12,6 +12,7 @@
 
 	<ItemGroup>
 		<AvaloniaResource Include="Assets\**" />
+		<AvaloniaResource Include="FlagIcon\Assets\**" />
 	</ItemGroup>
 
 </Project>

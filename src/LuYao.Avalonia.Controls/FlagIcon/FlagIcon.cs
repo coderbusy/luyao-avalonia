@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
@@ -11,15 +9,13 @@ namespace LuYao.Avalonia.Controls;
 
 /// <summary>
 /// Provides attached properties for displaying flag icons on Image controls.
-/// Flag icons are loaded from sprite sheets for efficient memory usage.
+/// Flag icons are loaded from individual PNG files.
+/// Scaling is handled by external controls.
 /// AOT-compatible implementation without reflection.
 /// </summary>
 public class FlagIcon
 {
-    private static readonly IReadOnlyDictionary<string, IImage> RegularCache;
-    private static readonly IReadOnlyDictionary<string, IImage> SmallCache;
-    private static readonly IImage? DefaultRegularImage;
-    private static readonly IImage? DefaultSmallImage;
+    private static readonly Uri DefaultUri = new("avares://LuYao.Avalonia.Controls/FlagIcon/Assets/xx.png");
 
     /// <summary>
     /// Attached property for setting the flag code (string)
@@ -27,56 +23,9 @@ public class FlagIcon
     public static readonly AttachedProperty<string> CodeProperty =
         AvaloniaProperty.RegisterAttached<FlagIcon, Image, string>("Code", defaultValue: string.Empty);
 
-    /// <summary>
-    /// Attached property for using small flag icons (20x15 instead of 100x75)
-    /// </summary>
-    public static readonly AttachedProperty<bool> UseSmallProperty =
-        AvaloniaProperty.RegisterAttached<FlagIcon, Image, bool>("UseSmall", defaultValue: false);
-
     static FlagIcon()
     {
-        // Load regular sprite sheet
-        using (var ms = AssetLoader.Open(new Uri("avares://LuYao.Avalonia.Controls/Assets/Images/flags-sprite.png")))
-        {
-            var bmp = new Bitmap(ms);
-            var flags = FlagData.GetRegularFlags().ToList();
-            
-            var regularDict = new Dictionary<string, IImage>(StringComparer.OrdinalIgnoreCase);
-            foreach (var (code, rect) in flags)
-            {
-                regularDict[code] = new CroppedBitmap(bmp, rect);
-            }
-            RegularCache = regularDict;
-            
-            // Set default XX flag
-            if (regularDict.TryGetValue("XX", out var defaultImg))
-            {
-                DefaultRegularImage = defaultImg;
-            }
-        }
-
-        // Load small sprite sheet
-        using (var ms = AssetLoader.Open(new Uri("avares://LuYao.Avalonia.Controls/Assets/Images/flags-sprite-small.png")))
-        {
-            var bmp = new Bitmap(ms);
-            var flags = FlagData.GetSmallFlags().ToList();
-            
-            var smallDict = new Dictionary<string, IImage>(StringComparer.OrdinalIgnoreCase);
-            foreach (var (code, rect) in flags)
-            {
-                smallDict[code] = new CroppedBitmap(bmp, rect);
-            }
-            SmallCache = smallDict;
-            
-            // Set default XX flag
-            if (smallDict.TryGetValue("XX", out var defaultImg))
-            {
-                DefaultSmallImage = defaultImg;
-            }
-        }
-
         CodeProperty.Changed.AddClassHandler<Image>(OnCodeChanged);
-        UseSmallProperty.Changed.AddClassHandler<Image>(OnUseSmallChanged);
     }
 
     /// <summary>
@@ -95,56 +44,47 @@ public class FlagIcon
         image.SetValue(CodeProperty, value);
     }
 
-    /// <summary>
-    /// Gets whether to use small flag icons
-    /// </summary>
-    public static bool GetUseSmall(Image image)
-    {
-        return image.GetValue(UseSmallProperty);
-    }
-
-    /// <summary>
-    /// Sets whether to use small flag icons
-    /// </summary>
-    public static void SetUseSmall(Image image, bool value)
-    {
-        image.SetValue(UseSmallProperty, value);
-    }
-
     private static void OnCodeChanged(Image image, AvaloniaPropertyChangedEventArgs e)
     {
         if (e.NewValue is string code)
         {
-            UpdateImage(image, code, GetUseSmall(image));
+            UpdateImage(image, code);
         }
     }
 
-    private static void OnUseSmallChanged(Image image, AvaloniaPropertyChangedEventArgs e)
-    {
-        if (e.NewValue is bool useSmall)
-        {
-            UpdateImage(image, GetCode(image), useSmall);
-        }
-    }
+    private static string FormatUri(string code) =>
+        $"avares://LuYao.Avalonia.Controls/FlagIcon/Assets/{code.ToLowerInvariant()}.png";
 
-    private static void UpdateImage(Image image, string code, bool useSmall)
+    private static void UpdateImage(Image image, string code)
     {
         if (string.IsNullOrWhiteSpace(code))
         {
             // Use default XX flag if no code is provided
-            image.Source = useSmall ? DefaultSmallImage : DefaultRegularImage;
+            LoadImage(image, DefaultUri);
             return;
         }
 
-        var cache = useSmall ? SmallCache : RegularCache;
-        if (cache.TryGetValue(code, out var img))
-        {
-            image.Source = img;
-        }
-        else
+        var uri = new Uri(FormatUri(code));
+        if (!AssetLoader.Exists(uri))
         {
             // If code not found, show XX flag
-            image.Source = useSmall ? DefaultSmallImage : DefaultRegularImage;
+            uri = DefaultUri;
+        }
+
+        LoadImage(image, uri);
+    }
+
+    private static void LoadImage(Image image, Uri uri)
+    {
+        try
+        {
+            using var stream = AssetLoader.Open(uri);
+            image.Source = new Bitmap(stream);
+        }
+        catch
+        {
+            // If loading fails, clear the source
+            image.Source = null;
         }
     }
 }

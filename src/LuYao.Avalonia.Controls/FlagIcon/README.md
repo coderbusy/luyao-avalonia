@@ -4,10 +4,9 @@ FlagIcon provides flag icons for countries and regions as an attached property t
 
 ## Features
 
-- **Sprite-based**: All 270+ flag images are stored in optimized sprite sheets for efficient memory usage
-- **Two sizes**: Regular (100x75) and Small (20x15) sprite sheets available
+- **Individual PNG files**: All 270+ flag images are stored as individual PNG files for maximum compatibility
+- **External scaling**: Scaling is handled by the Image control - set Width and Height as needed
 - **Easy to use**: Simple attached property syntax in XAML with string-based codes
-- **Lightweight**: Only two sprite sheet images are distributed instead of 270+ individual files
 - **AOT-compatible**: No reflection used, fully compatible with Native AOT compilation
 - **Fallback support**: Unknown flag codes automatically display the "XX" (unknown) flag
 
@@ -20,13 +19,19 @@ FlagIcon provides flag icons for countries and regions as an attached property t
 <Image ly:FlagIcon.Code="US" Width="100" />
 ```
 
-### Using Small Flags
+### Controlling Size
 
-For smaller icons, use the `UseSmall` property:
+Control the size using the Image control's Width and Height properties:
 
 ```xaml
-<Image ly:FlagIcon.Code="CN" ly:FlagIcon.UseSmall="True" Width="20" />
-<Image ly:FlagIcon.Code="US" ly:FlagIcon.UseSmall="True" Width="20" />
+<!-- Large flags -->
+<Image ly:FlagIcon.Code="CN" Width="100" Height="75" />
+
+<!-- Small/thumbnail flags -->
+<Image ly:FlagIcon.Code="US" Width="20" Height="15" />
+
+<!-- Custom size - aspect ratio maintained by Image control -->
+<Image ly:FlagIcon.Code="GB" Width="50" />
 ```
 
 ### Handling Unknown Codes
@@ -49,40 +54,22 @@ Codes are case-insensitive.
 
 ## Implementation Details
 
-- Flag icons are loaded from sprite sheets at startup
-- Images are cached in memory for efficient reuse
-- Uses Avalonia's `CroppedBitmap` to extract individual flags from the sprite sheet
-- Hardcoded position data ensures AOT compatibility without reflection
+- Flag icons are loaded from individual PNG files on demand
+- Each flag PNG is 100x75 pixels at base resolution
+- Scaling is handled by the Image control itself
 - String-based codes provide flexibility and type safety
+- AOT-compatible without reflection
 
-## Migration from Old FlagIcon Control
+## Migration from Sprite-based FlagIcon
 
-If you were using the old `FlagIcon` control:
+If you were using the old sprite-based FlagIcon:
 
-**Before:**
+The API has been simplified - the `UseSmall` property has been removed. Control sizing through the Image control's Width and Height properties:
+
 ```xaml
-<ly:FlagIcon Code="CN" />
+<!-- Before (with UseSmall) -->
+<Image ly:FlagIcon.Code="CN" ly:FlagIcon.UseSmall="True" Width="20" />
+
+<!-- After (without UseSmall) -->
+<Image ly:FlagIcon.Code="CN" Width="20" Height="15" />
 ```
-
-**After:**
-```xaml
-<Image ly:FlagIcon.Code="CN" Width="22" />
-```
-
-Note: You now need to explicitly set the Width (and optionally Height) of the Image control.
-
-## Migration from Enum-based Code Property
-
-If you were using the enum-based Code property:
-
-**Before:**
-```xaml
-<Image ly:FlagIcon.Code="CN" Width="22" />  <!-- FlagCode enum -->
-```
-
-**After:**
-```xaml
-<Image ly:FlagIcon.Code="CN" Width="22" />  <!-- String -->
-```
-
-The syntax remains the same, but now accepts string values instead of enum values, providing better flexibility and AOT compatibility.

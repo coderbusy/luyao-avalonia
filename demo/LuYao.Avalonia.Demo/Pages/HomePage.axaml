@@ -31,14 +31,14 @@
             
             <TextBlock Text="Small Flags (20x15):" FontWeight="Bold" />
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
-                <Image luyao:FlagIcon.Code="CN" luyao:FlagIcon.UseSmall="True" Width="20" />
-                <Image luyao:FlagIcon.Code="US" luyao:FlagIcon.UseSmall="True" Width="20" />
-                <Image luyao:FlagIcon.Code="GB" luyao:FlagIcon.UseSmall="True" Width="20" />
-                <Image luyao:FlagIcon.Code="JP" luyao:FlagIcon.UseSmall="True" Width="20" />
-                <Image luyao:FlagIcon.Code="FR" luyao:FlagIcon.UseSmall="True" Width="20" />
-                <Image luyao:FlagIcon.Code="DE" luyao:FlagIcon.UseSmall="True" Width="20" />
-                <Image luyao:FlagIcon.Code="IT" luyao:FlagIcon.UseSmall="True" Width="20" />
-                <Image luyao:FlagIcon.Code="ES" luyao:FlagIcon.UseSmall="True" Width="20" />
+                <Image luyao:FlagIcon.Code="CN" Width="20" Height="15" />
+                <Image luyao:FlagIcon.Code="US" Width="20" Height="15" />
+                <Image luyao:FlagIcon.Code="GB" Width="20" Height="15" />
+                <Image luyao:FlagIcon.Code="JP" Width="20" Height="15" />
+                <Image luyao:FlagIcon.Code="FR" Width="20" Height="15" />
+                <Image luyao:FlagIcon.Code="DE" Width="20" Height="15" />
+                <Image luyao:FlagIcon.Code="IT" Width="20" Height="15" />
+                <Image luyao:FlagIcon.Code="ES" Width="20" Height="15" />
             </StackPanel>
             
             <TextBlock Text="Mixed Sizes:" FontWeight="Bold" />
