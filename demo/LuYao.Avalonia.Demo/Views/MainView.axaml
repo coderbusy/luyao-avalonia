@@ -3,7 +3,7 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:ly="https://www.coderbusy.com/luyao"
+    xmlns:luo="https://www.coderbusy.com/luyao"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:LuYao.Avalonia.Demo.ViewModels"
     xmlns:views="clr-namespace:LuYao.Avalonia.Demo.Views"
@@ -28,37 +28,37 @@
                 
                 <TextBlock Text="Regular Flags (100x75):" FontWeight="Bold" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
-                    <Image ly:FlagIcon.Code="CN" Width="100" />
-                    <Image ly:FlagIcon.Code="US" Width="100" />
-                    <Image ly:FlagIcon.Code="GB" Width="100" />
-                    <Image ly:FlagIcon.Code="JP" Width="100" />
+                    <Image luo:FlagIcon.Code="CN" Width="100" />
+                    <Image luo:FlagIcon.Code="US" Width="100" />
+                    <Image luo:FlagIcon.Code="GB" Width="100" />
+                    <Image luo:FlagIcon.Code="JP" Width="100" />
                 </StackPanel>
                 
                 <TextBlock Text="Small Flags (20x15):" FontWeight="Bold" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
-                    <Image ly:FlagIcon.Code="CN" ly:FlagIcon.UseSmall="True" Width="20" />
-                    <Image ly:FlagIcon.Code="US" ly:FlagIcon.UseSmall="True" Width="20" />
-                    <Image ly:FlagIcon.Code="GB" ly:FlagIcon.UseSmall="True" Width="20" />
-                    <Image ly:FlagIcon.Code="JP" ly:FlagIcon.UseSmall="True" Width="20" />
-                    <Image ly:FlagIcon.Code="FR" ly:FlagIcon.UseSmall="True" Width="20" />
-                    <Image ly:FlagIcon.Code="DE" ly:FlagIcon.UseSmall="True" Width="20" />
-                    <Image ly:FlagIcon.Code="IT" ly:FlagIcon.UseSmall="True" Width="20" />
-                    <Image ly:FlagIcon.Code="ES" ly:FlagIcon.UseSmall="True" Width="20" />
+                    <Image luo:FlagIcon.Code="CN" luo:FlagIcon.UseSmall="True" Width="20" />
+                    <Image luo:FlagIcon.Code="US" luo:FlagIcon.UseSmall="True" Width="20" />
+                    <Image luo:FlagIcon.Code="GB" luo:FlagIcon.UseSmall="True" Width="20" />
+                    <Image luo:FlagIcon.Code="JP" luo:FlagIcon.UseSmall="True" Width="20" />
+                    <Image luo:FlagIcon.Code="FR" luo:FlagIcon.UseSmall="True" Width="20" />
+                    <Image luo:FlagIcon.Code="DE" luo:FlagIcon.UseSmall="True" Width="20" />
+                    <Image luo:FlagIcon.Code="IT" luo:FlagIcon.UseSmall="True" Width="20" />
+                    <Image luo:FlagIcon.Code="ES" luo:FlagIcon.UseSmall="True" Width="20" />
                 </StackPanel>
                 
                 <TextBlock Text="Mixed Sizes:" FontWeight="Bold" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
-                    <Image ly:FlagIcon.Code="CA" Width="50" />
-                    <Image ly:FlagIcon.Code="AU" Width="40" />
-                    <Image ly:FlagIcon.Code="IN" Width="30" />
-                    <Image ly:FlagIcon.Code="BR" Width="22" />
+                    <Image luo:FlagIcon.Code="CA" Width="50" />
+                    <Image luo:FlagIcon.Code="AU" Width="40" />
+                    <Image luo:FlagIcon.Code="IN" Width="30" />
+                    <Image luo:FlagIcon.Code="BR" Width="22" />
                 </StackPanel>
                 
                 <TextBlock Text="Fallback to XX for unknown codes:" FontWeight="Bold" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
-                    <Image ly:FlagIcon.Code="INVALID" Width="50" />
-                    <Image ly:FlagIcon.Code="ZZZ" Width="50" />
-                    <Image ly:FlagIcon.Code="" Width="50" />
+                    <Image luo:FlagIcon.Code="INVALID" Width="50" />
+                    <Image luo:FlagIcon.Code="ZZZ" Width="50" />
+                    <Image luo:FlagIcon.Code="" Width="50" />
                 </StackPanel>
             </StackPanel>
         </TabItem>
