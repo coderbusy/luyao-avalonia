@@ -1,3 +1,7 @@
+// Original implementation from HandyControl
+// https://github.com/HandyOrg/HandyControl
+// Adapted for Avalonia UI
+
 using System;
 using Avalonia;
 using Avalonia.Controls;
@@ -9,6 +13,10 @@ namespace LuYao.Avalonia.Controls;
 /// A panel that arranges child elements with uniform spacing between them.
 /// Supports both horizontal and vertical orientations.
 /// </summary>
+/// <remarks>
+/// Based on HandyControl's UniformSpacingPanel implementation.
+/// Original source: https://github.com/HandyOrg/HandyControl
+/// </remarks>
 public class UniformSpacingPanel : Panel
 {
     /// <summary>

@@ -2,6 +2,8 @@
 
 A panel control that arranges child elements with uniform spacing between them.
 
+> **Attribution**: This control is based on the [HandyControl](https://github.com/HandyOrg/HandyControl) library's UniformSpacingPanel implementation, adapted for Avalonia UI.
+
 ## Features
 
 - **Orientation Support**: Supports both Vertical and Horizontal orientations
