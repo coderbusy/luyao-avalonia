@@ -20,14 +20,38 @@
     </Design.DataContext>
     <TabControl>
         <TabItem Header="Home">
-            <StackPanel>
+            <StackPanel Margin="20" Spacing="20">
                 <TextBlock
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Text="{Binding Greeting}" />
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Image ly:FlagIcon.Code="CN" Width="22" />
-                    <Image ly:FlagIcon.Code="US" Width="22" />
+                
+                <TextBlock Text="Regular Flags (100x75):" FontWeight="Bold" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                    <Image ly:FlagIcon.Code="CN" Width="100" />
+                    <Image ly:FlagIcon.Code="US" Width="100" />
+                    <Image ly:FlagIcon.Code="GB" Width="100" />
+                    <Image ly:FlagIcon.Code="JP" Width="100" />
+                </StackPanel>
+                
+                <TextBlock Text="Small Flags (20x15):" FontWeight="Bold" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
+                    <Image ly:FlagIcon.Code="CN" ly:FlagIcon.UseSmall="True" Width="20" />
+                    <Image ly:FlagIcon.Code="US" ly:FlagIcon.UseSmall="True" Width="20" />
+                    <Image ly:FlagIcon.Code="GB" ly:FlagIcon.UseSmall="True" Width="20" />
+                    <Image ly:FlagIcon.Code="JP" ly:FlagIcon.UseSmall="True" Width="20" />
+                    <Image ly:FlagIcon.Code="FR" ly:FlagIcon.UseSmall="True" Width="20" />
+                    <Image ly:FlagIcon.Code="DE" ly:FlagIcon.UseSmall="True" Width="20" />
+                    <Image ly:FlagIcon.Code="IT" ly:FlagIcon.UseSmall="True" Width="20" />
+                    <Image ly:FlagIcon.Code="ES" ly:FlagIcon.UseSmall="True" Width="20" />
+                </StackPanel>
+                
+                <TextBlock Text="Mixed Sizes:" FontWeight="Bold" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                    <Image ly:FlagIcon.Code="CA" Width="50" />
+                    <Image ly:FlagIcon.Code="AU" Width="40" />
+                    <Image ly:FlagIcon.Code="IN" Width="30" />
+                    <Image ly:FlagIcon.Code="BR" Width="22" />
                 </StackPanel>
             </StackPanel>
         </TabItem>
