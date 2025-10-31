@@ -18,6 +18,7 @@ public class VirtualizingWrapPanelTests
         Assert.Equal(Orientation.Vertical, panel.Orientation);
         Assert.Equal(default(Size), panel.ItemSize);
         Assert.False(panel.StretchItems);
+        Assert.Null(panel.ItemSizeProvider);
     }
 
     [Fact]
@@ -83,5 +84,40 @@ public class VirtualizingWrapPanelTests
 
         // Assert
         Assert.IsAssignableFrom<VirtualizingPanel>(panel);
+    }
+
+    [Fact]
+    public void ItemSizeProvider_ShouldBeSettable()
+    {
+        // Arrange
+        var panel = new VirtualizingWrapPanel();
+        var sizeProvider = new TestItemSizeProvider();
+
+        // Act
+        panel.ItemSizeProvider = sizeProvider;
+
+        // Assert
+        Assert.Equal(sizeProvider, panel.ItemSizeProvider);
+    }
+
+    [Fact]
+    public void ItemSizeProvider_ShouldDefaultToNull()
+    {
+        // Arrange & Act
+        var panel = new VirtualizingWrapPanel();
+
+        // Assert
+        Assert.Null(panel.ItemSizeProvider);
+    }
+
+    private class TestItemSizeProvider : IItemSizeProvider
+    {
+        public Size GetSizeForItem(int itemIndex)
+        {
+            // Return variable sizes based on index
+            return itemIndex % 2 == 0 
+                ? new Size(150, 100) 
+                : new Size(200, 150);
+        }
     }
 }

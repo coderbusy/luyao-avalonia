@@ -41,6 +41,14 @@ public class VirtualizingWrapPanel : VirtualizingPanel
             false);
 
     /// <summary>
+    /// Defines the <see cref="ItemSizeProvider"/> property.
+    /// </summary>
+    public static readonly StyledProperty<IItemSizeProvider?> ItemSizeProviderProperty =
+        AvaloniaProperty.Register<VirtualizingWrapPanel, IItemSizeProvider?>(
+            nameof(ItemSizeProvider),
+            null);
+
+    /// <summary>
     /// Gets or sets the orientation in which items are arranged before wrapping.
     /// The default value is Vertical.
     /// </summary>
@@ -53,6 +61,7 @@ public class VirtualizingWrapPanel : VirtualizingPanel
     /// <summary>
     /// Gets or sets the size of the items. The default value is Size.Empty.
     /// If the value is Size.Empty, the item size is determined by measuring the first realized item.
+    /// This property is ignored if ItemSizeProvider is set.
     /// </summary>
     public Size ItemSize
     {
@@ -68,6 +77,16 @@ public class VirtualizingWrapPanel : VirtualizingPanel
     {
         get => GetValue(StretchItemsProperty);
         set => SetValue(StretchItemsProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the item size provider for variable-sized items.
+    /// When set, this takes precedence over the ItemSize property.
+    /// </summary>
+    public IItemSizeProvider? ItemSizeProvider
+    {
+        get => GetValue(ItemSizeProviderProperty);
+        set => SetValue(ItemSizeProviderProperty, value);
     }
 
     // Cache for calculated layout information
@@ -416,55 +435,66 @@ public class VirtualizingWrapPanel : VirtualizingPanel
     private void CalculateLayout(double panelSize, Size itemSize, int itemCount, bool isVertical)
     {
         _layoutCache.Clear();
+        var sizeProvider = ItemSizeProvider;
 
         if (isVertical)
         {
             // Vertical orientation: items flow left-to-right, then wrap to next row
-            var itemsPerRow = Math.Max(1, (int)(panelSize / itemSize.Width));
             var currentX = 0.0;
             var currentY = 0.0;
+            var currentRowHeight = 0.0;
 
             for (int i = 0; i < itemCount; i++)
             {
-                if (currentX + itemSize.Width > panelSize && currentX > 0)
+                // Get item size from provider or use default
+                var currentItemSize = sizeProvider?.GetSizeForItem(i) ?? itemSize;
+                
+                if (currentX + currentItemSize.Width > panelSize && currentX > 0)
                 {
                     // Move to next row
-                    currentY += itemSize.Height;
+                    currentY += currentRowHeight;
                     currentX = 0;
+                    currentRowHeight = 0;
                 }
 
                 _layoutCache.Add(new LayoutInfo
                 {
                     ItemIndex = i,
-                    Bounds = new Rect(currentX, currentY, itemSize.Width, itemSize.Height)
+                    Bounds = new Rect(currentX, currentY, currentItemSize.Width, currentItemSize.Height)
                 });
 
-                currentX += itemSize.Width;
+                currentX += currentItemSize.Width;
+                currentRowHeight = Math.Max(currentRowHeight, currentItemSize.Height);
             }
         }
         else
         {
             // Horizontal orientation: items flow top-to-bottom, then wrap to next column
-            var itemsPerColumn = Math.Max(1, (int)(panelSize / itemSize.Height));
             var currentX = 0.0;
             var currentY = 0.0;
+            var currentColumnWidth = 0.0;
 
             for (int i = 0; i < itemCount; i++)
             {
-                if (currentY + itemSize.Height > panelSize && currentY > 0)
+                // Get item size from provider or use default
+                var currentItemSize = sizeProvider?.GetSizeForItem(i) ?? itemSize;
+                
+                if (currentY + currentItemSize.Height > panelSize && currentY > 0)
                 {
                     // Move to next column
-                    currentX += itemSize.Width;
+                    currentX += currentColumnWidth;
                     currentY = 0;
+                    currentColumnWidth = 0;
                 }
 
                 _layoutCache.Add(new LayoutInfo
                 {
                     ItemIndex = i,
-                    Bounds = new Rect(currentX, currentY, itemSize.Width, itemSize.Height)
+                    Bounds = new Rect(currentX, currentY, currentItemSize.Width, currentItemSize.Height)
                 });
 
-                currentY += itemSize.Height;
+                currentY += currentItemSize.Height;
+                currentColumnWidth = Math.Max(currentColumnWidth, currentItemSize.Width);
             }
         }
     }

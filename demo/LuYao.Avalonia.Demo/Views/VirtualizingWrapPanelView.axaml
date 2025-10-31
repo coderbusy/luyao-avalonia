@@ -22,6 +22,14 @@
             <TextBlock FontSize="12"
                        Foreground="Gray"
                        Text="{Binding ItemCount, StringFormat='Total Items: {0:N0} (only visible items are rendered)'}" />
+            <CheckBox Content="Use Variable Item Sizes"
+                      IsChecked="{Binding UseVariableSizes}"
+                      Margin="0,5,0,0" />
+            <TextBlock FontSize="11"
+                       Foreground="Gray"
+                       Text="(Even items: 100x80, Odd items: 150x120)"
+                       IsVisible="{Binding UseVariableSizes}"
+                       Margin="20,0,0,0" />
         </StackPanel>
         
         <ScrollViewer Grid.Row="1">
@@ -29,6 +37,7 @@
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <ly:VirtualizingWrapPanel ItemSize="150, 100" 
+                                                  ItemSizeProvider="{Binding ItemSizeProvider}"
                                                   Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>

@@ -98,7 +98,7 @@ public class ItemViewModel
 
 - **Type**: `Size`
 - **Default**: `default(Size)` (0, 0)
-- **Description**: Specifies the size of each item. If not set (or set to 0, 0), the panel will measure the first realized item to determine the size.
+- **Description**: Specifies the size of each item. If not set (or set to 0, 0), the panel will measure the first realized item to determine the size. This property is ignored if `ItemSizeProvider` is set.
 
 **Example:**
 ```xaml
@@ -111,22 +111,49 @@ public class ItemViewModel
 - **Default**: `false`
 - **Description**: When `true`, items are stretched to fill up remaining space in each row/column.
 
+### ItemSizeProvider
+
+- **Type**: `IItemSizeProvider?`
+- **Default**: `null`
+- **Description**: When set, provides custom sizes for individual items, enabling variable-sized items. Takes precedence over the `ItemSize` property.
+
+**Example:**
+```csharp
+public class VariableItemSizeProvider : IItemSizeProvider
+{
+    public Size GetSizeForItem(int itemIndex)
+    {
+        // Return different sizes based on index
+        return itemIndex % 2 == 0 
+            ? new Size(100, 80)   // Even items
+            : new Size(150, 120); // Odd items
+    }
+}
+```
+
+```xaml
+<ly:VirtualizingWrapPanel ItemSizeProvider="{Binding MyItemSizeProvider}" />
+```
+
 ## Layout Behavior
 
 ### Vertical Orientation (default)
 - Items are arranged from left to right
 - When a row is full, wrapping occurs to the next row below
 - Scrolling occurs vertically
+- When using `ItemSizeProvider`, row height adapts to the tallest item in each row
 
 ### Horizontal Orientation
 - Items are arranged from top to bottom
 - When a column is full, wrapping occurs to the next column to the right
 - Scrolling occurs horizontally
+- When using `ItemSizeProvider`, column width adapts to the widest item in each column
 
 ## Performance Considerations
 
 - **Virtualization**: The panel only creates visual elements for items in the visible viewport plus a buffer zone
 - **Element Recycling**: Implements an efficient recycling pool that reuses container elements when scrolling, significantly reducing GC pressure
+- **Variable-Sized Items**: ItemSizeProvider is efficiently integrated into layout calculation with minimal performance impact
 - **Large Datasets**: Designed to handle thousands of items efficiently through virtualization and recycling
 - **Memory Usage**: Significantly reduces memory consumption compared to non-virtualizing panels
 - **Scroll Performance**: Automatically updates displayed items during scrolling with minimal overhead
@@ -144,12 +171,12 @@ The element recycling pool provides:
 This implementation follows the API design of the WPF VirtualizingWrapPanel for consistency:
 - `ItemSize` instead of separate `ItemWidth`/`ItemHeight`
 - `Orientation` property for direction control
+- `ItemSizeProvider` interface for variable-sized items
 - Standard wrap panel behavior without custom break line logic
 - Element recycling pool matching Avalonia's VirtualizingStackPanel pattern
 
 ## Future Enhancements
 
-- Support for variable item sizes via `ItemSizeProvider`
 - `SpacingMode` and `ItemAlignment` properties
 - Grid layout mode option
 - Enhanced ScrollIntoView with animation options
@@ -159,6 +186,7 @@ This implementation follows the API design of the WPF VirtualizingWrapPanel for 
 
 Run the demo application included in the solution to see the VirtualizingWrapPanel in action. The demo includes:
 - 10,000 sample items to demonstrate virtualization performance
+- Toggle for variable item sizes (using ItemSizeProvider)
 - Interactive demonstration of the layout behavior
 - Item count display showing total items vs rendered items
 
