@@ -1,4 +1,4 @@
-using Avalonia.Media;
+using System.Collections.Generic;
 using Avalonia;
 
 namespace LuYao.Avalonia.Controls;
@@ -8,568 +8,555 @@ namespace LuYao.Avalonia.Controls;
 /// </summary>
 internal static class FlagData
 {
-    public static readonly int SpriteColumns = 17;
-    public static readonly int SpriteRows = 16;
-    
     /// <summary>
-    /// Get regular flag rectangle by code
+    /// Get all regular flag rectangles (100x75)
     /// </summary>
-    public static PixelRect? GetRegularRect(string code)
+    public static IEnumerable<(string Code, PixelRect Rect)> GetRegularFlags()
     {
-        return code.ToUpperInvariant() switch
-        {
-            "AD" => new PixelRect(0, 0, 100, 75),
-            "AE" => new PixelRect(100, 0, 100, 75),
-            "AF" => new PixelRect(200, 0, 100, 75),
-            "AG" => new PixelRect(300, 0, 100, 75),
-            "AI" => new PixelRect(400, 0, 100, 75),
-            "AL" => new PixelRect(500, 0, 100, 75),
-            "AM" => new PixelRect(600, 0, 100, 75),
-            "AO" => new PixelRect(700, 0, 100, 75),
-            "AQ" => new PixelRect(800, 0, 100, 75),
-            "AR" => new PixelRect(900, 0, 100, 75),
-            "ARAB" => new PixelRect(1000, 0, 100, 75),
-            "AS" => new PixelRect(1100, 0, 100, 75),
-            "AT" => new PixelRect(1200, 0, 100, 75),
-            "AU" => new PixelRect(1300, 0, 100, 75),
-            "AW" => new PixelRect(1400, 0, 100, 75),
-            "AX" => new PixelRect(1500, 0, 100, 75),
-            "AZ" => new PixelRect(1600, 0, 100, 75),
-            "BA" => new PixelRect(0, 75, 100, 75),
-            "BB" => new PixelRect(100, 75, 100, 75),
-            "BD" => new PixelRect(200, 75, 100, 75),
-            "BE" => new PixelRect(300, 75, 100, 75),
-            "BF" => new PixelRect(400, 75, 100, 75),
-            "BG" => new PixelRect(500, 75, 100, 75),
-            "BH" => new PixelRect(600, 75, 100, 75),
-            "BI" => new PixelRect(700, 75, 100, 75),
-            "BJ" => new PixelRect(800, 75, 100, 75),
-            "BL" => new PixelRect(900, 75, 100, 75),
-            "BM" => new PixelRect(1000, 75, 100, 75),
-            "BN" => new PixelRect(1100, 75, 100, 75),
-            "BO" => new PixelRect(1200, 75, 100, 75),
-            "BQ" => new PixelRect(1300, 75, 100, 75),
-            "BR" => new PixelRect(1400, 75, 100, 75),
-            "BS" => new PixelRect(1500, 75, 100, 75),
-            "BT" => new PixelRect(1600, 75, 100, 75),
-            "BV" => new PixelRect(0, 150, 100, 75),
-            "BW" => new PixelRect(100, 150, 100, 75),
-            "BY" => new PixelRect(200, 150, 100, 75),
-            "BZ" => new PixelRect(300, 150, 100, 75),
-            "CA" => new PixelRect(400, 150, 100, 75),
-            "CC" => new PixelRect(500, 150, 100, 75),
-            "CD" => new PixelRect(600, 150, 100, 75),
-            "CEFTA" => new PixelRect(700, 150, 100, 75),
-            "CF" => new PixelRect(800, 150, 100, 75),
-            "CG" => new PixelRect(900, 150, 100, 75),
-            "CH" => new PixelRect(1000, 150, 100, 75),
-            "CI" => new PixelRect(1100, 150, 100, 75),
-            "CK" => new PixelRect(1200, 150, 100, 75),
-            "CL" => new PixelRect(1300, 150, 100, 75),
-            "CM" => new PixelRect(1400, 150, 100, 75),
-            "CN" => new PixelRect(1500, 150, 100, 75),
-            "CO" => new PixelRect(1600, 150, 100, 75),
-            "CP" => new PixelRect(0, 225, 100, 75),
-            "CR" => new PixelRect(100, 225, 100, 75),
-            "CU" => new PixelRect(200, 225, 100, 75),
-            "CV" => new PixelRect(300, 225, 100, 75),
-            "CW" => new PixelRect(400, 225, 100, 75),
-            "CX" => new PixelRect(500, 225, 100, 75),
-            "CY" => new PixelRect(600, 225, 100, 75),
-            "CZ" => new PixelRect(700, 225, 100, 75),
-            "DE" => new PixelRect(800, 225, 100, 75),
-            "DG" => new PixelRect(900, 225, 100, 75),
-            "DJ" => new PixelRect(1000, 225, 100, 75),
-            "DK" => new PixelRect(1100, 225, 100, 75),
-            "DM" => new PixelRect(1200, 225, 100, 75),
-            "DO" => new PixelRect(1300, 225, 100, 75),
-            "DZ" => new PixelRect(1400, 225, 100, 75),
-            "EAC" => new PixelRect(1500, 225, 100, 75),
-            "EC" => new PixelRect(1600, 225, 100, 75),
-            "EE" => new PixelRect(0, 300, 100, 75),
-            "EG" => new PixelRect(100, 300, 100, 75),
-            "EH" => new PixelRect(200, 300, 100, 75),
-            "ER" => new PixelRect(300, 300, 100, 75),
-            "ES" => new PixelRect(400, 300, 100, 75),
-            "ES-CT" => new PixelRect(500, 300, 100, 75),
-            "ES-GA" => new PixelRect(600, 300, 100, 75),
-            "ES-PV" => new PixelRect(700, 300, 100, 75),
-            "ET" => new PixelRect(800, 300, 100, 75),
-            "EU" => new PixelRect(900, 300, 100, 75),
-            "FI" => new PixelRect(1000, 300, 100, 75),
-            "FJ" => new PixelRect(1100, 300, 100, 75),
-            "FK" => new PixelRect(1200, 300, 100, 75),
-            "FM" => new PixelRect(1300, 300, 100, 75),
-            "FO" => new PixelRect(1400, 300, 100, 75),
-            "FR" => new PixelRect(1500, 300, 100, 75),
-            "GA" => new PixelRect(1600, 300, 100, 75),
-            "GB" => new PixelRect(0, 375, 100, 75),
-            "GB-ENG" => new PixelRect(100, 375, 100, 75),
-            "GB-NIR" => new PixelRect(200, 375, 100, 75),
-            "GB-SCT" => new PixelRect(300, 375, 100, 75),
-            "GB-WLS" => new PixelRect(400, 375, 100, 75),
-            "GD" => new PixelRect(500, 375, 100, 75),
-            "GE" => new PixelRect(600, 375, 100, 75),
-            "GF" => new PixelRect(700, 375, 100, 75),
-            "GG" => new PixelRect(800, 375, 100, 75),
-            "GH" => new PixelRect(900, 375, 100, 75),
-            "GI" => new PixelRect(1000, 375, 100, 75),
-            "GL" => new PixelRect(1100, 375, 100, 75),
-            "GM" => new PixelRect(1200, 375, 100, 75),
-            "GN" => new PixelRect(1300, 375, 100, 75),
-            "GP" => new PixelRect(1400, 375, 100, 75),
-            "GQ" => new PixelRect(1500, 375, 100, 75),
-            "GR" => new PixelRect(1600, 375, 100, 75),
-            "GS" => new PixelRect(0, 450, 100, 75),
-            "GT" => new PixelRect(100, 450, 100, 75),
-            "GU" => new PixelRect(200, 450, 100, 75),
-            "GW" => new PixelRect(300, 450, 100, 75),
-            "GY" => new PixelRect(400, 450, 100, 75),
-            "HK" => new PixelRect(500, 450, 100, 75),
-            "HM" => new PixelRect(600, 450, 100, 75),
-            "HN" => new PixelRect(700, 450, 100, 75),
-            "HR" => new PixelRect(800, 450, 100, 75),
-            "HT" => new PixelRect(900, 450, 100, 75),
-            "HU" => new PixelRect(1000, 450, 100, 75),
-            "IC" => new PixelRect(1100, 450, 100, 75),
-            "ID" => new PixelRect(1200, 450, 100, 75),
-            "IE" => new PixelRect(1300, 450, 100, 75),
-            "IL" => new PixelRect(1400, 450, 100, 75),
-            "IM" => new PixelRect(1500, 450, 100, 75),
-            "IN" => new PixelRect(1600, 450, 100, 75),
-            "IO" => new PixelRect(0, 525, 100, 75),
-            "IQ" => new PixelRect(100, 525, 100, 75),
-            "IR" => new PixelRect(200, 525, 100, 75),
-            "IS" => new PixelRect(300, 525, 100, 75),
-            "IT" => new PixelRect(400, 525, 100, 75),
-            "JE" => new PixelRect(500, 525, 100, 75),
-            "JM" => new PixelRect(600, 525, 100, 75),
-            "JO" => new PixelRect(700, 525, 100, 75),
-            "JP" => new PixelRect(800, 525, 100, 75),
-            "KE" => new PixelRect(900, 525, 100, 75),
-            "KG" => new PixelRect(1000, 525, 100, 75),
-            "KH" => new PixelRect(1100, 525, 100, 75),
-            "KI" => new PixelRect(1200, 525, 100, 75),
-            "KM" => new PixelRect(1300, 525, 100, 75),
-            "KN" => new PixelRect(1400, 525, 100, 75),
-            "KP" => new PixelRect(1500, 525, 100, 75),
-            "KR" => new PixelRect(1600, 525, 100, 75),
-            "KW" => new PixelRect(0, 600, 100, 75),
-            "KY" => new PixelRect(100, 600, 100, 75),
-            "KZ" => new PixelRect(200, 600, 100, 75),
-            "LA" => new PixelRect(300, 600, 100, 75),
-            "LB" => new PixelRect(400, 600, 100, 75),
-            "LC" => new PixelRect(500, 600, 100, 75),
-            "LI" => new PixelRect(600, 600, 100, 75),
-            "LK" => new PixelRect(700, 600, 100, 75),
-            "LR" => new PixelRect(800, 600, 100, 75),
-            "LS" => new PixelRect(900, 600, 100, 75),
-            "LT" => new PixelRect(1000, 600, 100, 75),
-            "LU" => new PixelRect(1100, 600, 100, 75),
-            "LV" => new PixelRect(1200, 600, 100, 75),
-            "LY" => new PixelRect(1300, 600, 100, 75),
-            "MA" => new PixelRect(1400, 600, 100, 75),
-            "MC" => new PixelRect(1500, 600, 100, 75),
-            "MD" => new PixelRect(1600, 600, 100, 75),
-            "ME" => new PixelRect(0, 675, 100, 75),
-            "MF" => new PixelRect(100, 675, 100, 75),
-            "MG" => new PixelRect(200, 675, 100, 75),
-            "MH" => new PixelRect(300, 675, 100, 75),
-            "MK" => new PixelRect(400, 675, 100, 75),
-            "ML" => new PixelRect(500, 675, 100, 75),
-            "MM" => new PixelRect(600, 675, 100, 75),
-            "MN" => new PixelRect(700, 675, 100, 75),
-            "MO" => new PixelRect(800, 675, 100, 75),
-            "MP" => new PixelRect(900, 675, 100, 75),
-            "MQ" => new PixelRect(1000, 675, 100, 75),
-            "MR" => new PixelRect(1100, 675, 100, 75),
-            "MS" => new PixelRect(1200, 675, 100, 75),
-            "MT" => new PixelRect(1300, 675, 100, 75),
-            "MU" => new PixelRect(1400, 675, 100, 75),
-            "MV" => new PixelRect(1500, 675, 100, 75),
-            "MW" => new PixelRect(1600, 675, 100, 75),
-            "MX" => new PixelRect(0, 750, 100, 75),
-            "MY" => new PixelRect(100, 750, 100, 75),
-            "MZ" => new PixelRect(200, 750, 100, 75),
-            "NA" => new PixelRect(300, 750, 100, 75),
-            "NC" => new PixelRect(400, 750, 100, 75),
-            "NE" => new PixelRect(500, 750, 100, 75),
-            "NF" => new PixelRect(600, 750, 100, 75),
-            "NG" => new PixelRect(700, 750, 100, 75),
-            "NI" => new PixelRect(800, 750, 100, 75),
-            "NL" => new PixelRect(900, 750, 100, 75),
-            "NO" => new PixelRect(1000, 750, 100, 75),
-            "NP" => new PixelRect(1100, 750, 100, 75),
-            "NR" => new PixelRect(1200, 750, 100, 75),
-            "NU" => new PixelRect(1300, 750, 100, 75),
-            "NZ" => new PixelRect(1400, 750, 100, 75),
-            "OM" => new PixelRect(1500, 750, 100, 75),
-            "PA" => new PixelRect(1600, 750, 100, 75),
-            "PC" => new PixelRect(0, 825, 100, 75),
-            "PE" => new PixelRect(100, 825, 100, 75),
-            "PF" => new PixelRect(200, 825, 100, 75),
-            "PG" => new PixelRect(300, 825, 100, 75),
-            "PH" => new PixelRect(400, 825, 100, 75),
-            "PK" => new PixelRect(500, 825, 100, 75),
-            "PL" => new PixelRect(600, 825, 100, 75),
-            "PM" => new PixelRect(700, 825, 100, 75),
-            "PN" => new PixelRect(800, 825, 100, 75),
-            "PR" => new PixelRect(900, 825, 100, 75),
-            "PS" => new PixelRect(1000, 825, 100, 75),
-            "PT" => new PixelRect(1100, 825, 100, 75),
-            "PW" => new PixelRect(1200, 825, 100, 75),
-            "PY" => new PixelRect(1300, 825, 100, 75),
-            "QA" => new PixelRect(1400, 825, 100, 75),
-            "RE" => new PixelRect(1500, 825, 100, 75),
-            "RO" => new PixelRect(1600, 825, 100, 75),
-            "RS" => new PixelRect(0, 900, 100, 75),
-            "RU" => new PixelRect(100, 900, 100, 75),
-            "RW" => new PixelRect(200, 900, 100, 75),
-            "SA" => new PixelRect(300, 900, 100, 75),
-            "SB" => new PixelRect(400, 900, 100, 75),
-            "SC" => new PixelRect(500, 900, 100, 75),
-            "SD" => new PixelRect(600, 900, 100, 75),
-            "SE" => new PixelRect(700, 900, 100, 75),
-            "SG" => new PixelRect(800, 900, 100, 75),
-            "SH" => new PixelRect(900, 900, 100, 75),
-            "SH-AC" => new PixelRect(1000, 900, 100, 75),
-            "SH-HL" => new PixelRect(1100, 900, 100, 75),
-            "SH-TA" => new PixelRect(1200, 900, 100, 75),
-            "SI" => new PixelRect(1300, 900, 100, 75),
-            "SJ" => new PixelRect(1400, 900, 100, 75),
-            "SK" => new PixelRect(1500, 900, 100, 75),
-            "SL" => new PixelRect(1600, 900, 100, 75),
-            "SM" => new PixelRect(0, 975, 100, 75),
-            "SN" => new PixelRect(100, 975, 100, 75),
-            "SO" => new PixelRect(200, 975, 100, 75),
-            "SR" => new PixelRect(300, 975, 100, 75),
-            "SS" => new PixelRect(400, 975, 100, 75),
-            "ST" => new PixelRect(500, 975, 100, 75),
-            "SV" => new PixelRect(600, 975, 100, 75),
-            "SX" => new PixelRect(700, 975, 100, 75),
-            "SY" => new PixelRect(800, 975, 100, 75),
-            "SZ" => new PixelRect(900, 975, 100, 75),
-            "TC" => new PixelRect(1000, 975, 100, 75),
-            "TD" => new PixelRect(1100, 975, 100, 75),
-            "TF" => new PixelRect(1200, 975, 100, 75),
-            "TG" => new PixelRect(1300, 975, 100, 75),
-            "TH" => new PixelRect(1400, 975, 100, 75),
-            "TJ" => new PixelRect(1500, 975, 100, 75),
-            "TK" => new PixelRect(1600, 975, 100, 75),
-            "TL" => new PixelRect(0, 1050, 100, 75),
-            "TM" => new PixelRect(100, 1050, 100, 75),
-            "TN" => new PixelRect(200, 1050, 100, 75),
-            "TO" => new PixelRect(300, 1050, 100, 75),
-            "TR" => new PixelRect(400, 1050, 100, 75),
-            "TT" => new PixelRect(500, 1050, 100, 75),
-            "TV" => new PixelRect(600, 1050, 100, 75),
-            "TW" => new PixelRect(700, 1050, 100, 75),
-            "TZ" => new PixelRect(800, 1050, 100, 75),
-            "UA" => new PixelRect(900, 1050, 100, 75),
-            "UG" => new PixelRect(1000, 1050, 100, 75),
-            "UM" => new PixelRect(1100, 1050, 100, 75),
-            "UN" => new PixelRect(1200, 1050, 100, 75),
-            "US" => new PixelRect(1300, 1050, 100, 75),
-            "UY" => new PixelRect(1400, 1050, 100, 75),
-            "UZ" => new PixelRect(1500, 1050, 100, 75),
-            "VA" => new PixelRect(1600, 1050, 100, 75),
-            "VC" => new PixelRect(0, 1125, 100, 75),
-            "VE" => new PixelRect(100, 1125, 100, 75),
-            "VG" => new PixelRect(200, 1125, 100, 75),
-            "VI" => new PixelRect(300, 1125, 100, 75),
-            "VN" => new PixelRect(400, 1125, 100, 75),
-            "VU" => new PixelRect(500, 1125, 100, 75),
-            "WF" => new PixelRect(600, 1125, 100, 75),
-            "WS" => new PixelRect(700, 1125, 100, 75),
-            "XK" => new PixelRect(800, 1125, 100, 75),
-            "XX" => new PixelRect(900, 1125, 100, 75),
-            "YE" => new PixelRect(1000, 1125, 100, 75),
-            "YT" => new PixelRect(1100, 1125, 100, 75),
-            "ZA" => new PixelRect(1200, 1125, 100, 75),
-            "ZM" => new PixelRect(1300, 1125, 100, 75),
-            "ZW" => new PixelRect(1400, 1125, 100, 75),
-            _ => null
-        };
+        yield return ("AD", new PixelRect(0, 0, 100, 75));
+        yield return ("AE", new PixelRect(100, 0, 100, 75));
+        yield return ("AF", new PixelRect(200, 0, 100, 75));
+        yield return ("AG", new PixelRect(300, 0, 100, 75));
+        yield return ("AI", new PixelRect(400, 0, 100, 75));
+        yield return ("AL", new PixelRect(500, 0, 100, 75));
+        yield return ("AM", new PixelRect(600, 0, 100, 75));
+        yield return ("AO", new PixelRect(700, 0, 100, 75));
+        yield return ("AQ", new PixelRect(800, 0, 100, 75));
+        yield return ("AR", new PixelRect(900, 0, 100, 75));
+        yield return ("ARAB", new PixelRect(1000, 0, 100, 75));
+        yield return ("AS", new PixelRect(1100, 0, 100, 75));
+        yield return ("AT", new PixelRect(1200, 0, 100, 75));
+        yield return ("AU", new PixelRect(1300, 0, 100, 75));
+        yield return ("AW", new PixelRect(1400, 0, 100, 75));
+        yield return ("AX", new PixelRect(1500, 0, 100, 75));
+        yield return ("AZ", new PixelRect(1600, 0, 100, 75));
+        yield return ("BA", new PixelRect(0, 75, 100, 75));
+        yield return ("BB", new PixelRect(100, 75, 100, 75));
+        yield return ("BD", new PixelRect(200, 75, 100, 75));
+        yield return ("BE", new PixelRect(300, 75, 100, 75));
+        yield return ("BF", new PixelRect(400, 75, 100, 75));
+        yield return ("BG", new PixelRect(500, 75, 100, 75));
+        yield return ("BH", new PixelRect(600, 75, 100, 75));
+        yield return ("BI", new PixelRect(700, 75, 100, 75));
+        yield return ("BJ", new PixelRect(800, 75, 100, 75));
+        yield return ("BL", new PixelRect(900, 75, 100, 75));
+        yield return ("BM", new PixelRect(1000, 75, 100, 75));
+        yield return ("BN", new PixelRect(1100, 75, 100, 75));
+        yield return ("BO", new PixelRect(1200, 75, 100, 75));
+        yield return ("BQ", new PixelRect(1300, 75, 100, 75));
+        yield return ("BR", new PixelRect(1400, 75, 100, 75));
+        yield return ("BS", new PixelRect(1500, 75, 100, 75));
+        yield return ("BT", new PixelRect(1600, 75, 100, 75));
+        yield return ("BV", new PixelRect(0, 150, 100, 75));
+        yield return ("BW", new PixelRect(100, 150, 100, 75));
+        yield return ("BY", new PixelRect(200, 150, 100, 75));
+        yield return ("BZ", new PixelRect(300, 150, 100, 75));
+        yield return ("CA", new PixelRect(400, 150, 100, 75));
+        yield return ("CC", new PixelRect(500, 150, 100, 75));
+        yield return ("CD", new PixelRect(600, 150, 100, 75));
+        yield return ("CEFTA", new PixelRect(700, 150, 100, 75));
+        yield return ("CF", new PixelRect(800, 150, 100, 75));
+        yield return ("CG", new PixelRect(900, 150, 100, 75));
+        yield return ("CH", new PixelRect(1000, 150, 100, 75));
+        yield return ("CI", new PixelRect(1100, 150, 100, 75));
+        yield return ("CK", new PixelRect(1200, 150, 100, 75));
+        yield return ("CL", new PixelRect(1300, 150, 100, 75));
+        yield return ("CM", new PixelRect(1400, 150, 100, 75));
+        yield return ("CN", new PixelRect(1500, 150, 100, 75));
+        yield return ("CO", new PixelRect(1600, 150, 100, 75));
+        yield return ("CP", new PixelRect(0, 225, 100, 75));
+        yield return ("CR", new PixelRect(100, 225, 100, 75));
+        yield return ("CU", new PixelRect(200, 225, 100, 75));
+        yield return ("CV", new PixelRect(300, 225, 100, 75));
+        yield return ("CW", new PixelRect(400, 225, 100, 75));
+        yield return ("CX", new PixelRect(500, 225, 100, 75));
+        yield return ("CY", new PixelRect(600, 225, 100, 75));
+        yield return ("CZ", new PixelRect(700, 225, 100, 75));
+        yield return ("DE", new PixelRect(800, 225, 100, 75));
+        yield return ("DG", new PixelRect(900, 225, 100, 75));
+        yield return ("DJ", new PixelRect(1000, 225, 100, 75));
+        yield return ("DK", new PixelRect(1100, 225, 100, 75));
+        yield return ("DM", new PixelRect(1200, 225, 100, 75));
+        yield return ("DO", new PixelRect(1300, 225, 100, 75));
+        yield return ("DZ", new PixelRect(1400, 225, 100, 75));
+        yield return ("EAC", new PixelRect(1500, 225, 100, 75));
+        yield return ("EC", new PixelRect(1600, 225, 100, 75));
+        yield return ("EE", new PixelRect(0, 300, 100, 75));
+        yield return ("EG", new PixelRect(100, 300, 100, 75));
+        yield return ("EH", new PixelRect(200, 300, 100, 75));
+        yield return ("ER", new PixelRect(300, 300, 100, 75));
+        yield return ("ES", new PixelRect(400, 300, 100, 75));
+        yield return ("ES-CT", new PixelRect(500, 300, 100, 75));
+        yield return ("ES-GA", new PixelRect(600, 300, 100, 75));
+        yield return ("ES-PV", new PixelRect(700, 300, 100, 75));
+        yield return ("ET", new PixelRect(800, 300, 100, 75));
+        yield return ("EU", new PixelRect(900, 300, 100, 75));
+        yield return ("FI", new PixelRect(1000, 300, 100, 75));
+        yield return ("FJ", new PixelRect(1100, 300, 100, 75));
+        yield return ("FK", new PixelRect(1200, 300, 100, 75));
+        yield return ("FM", new PixelRect(1300, 300, 100, 75));
+        yield return ("FO", new PixelRect(1400, 300, 100, 75));
+        yield return ("FR", new PixelRect(1500, 300, 100, 75));
+        yield return ("GA", new PixelRect(1600, 300, 100, 75));
+        yield return ("GB", new PixelRect(0, 375, 100, 75));
+        yield return ("GB-ENG", new PixelRect(100, 375, 100, 75));
+        yield return ("GB-NIR", new PixelRect(200, 375, 100, 75));
+        yield return ("GB-SCT", new PixelRect(300, 375, 100, 75));
+        yield return ("GB-WLS", new PixelRect(400, 375, 100, 75));
+        yield return ("GD", new PixelRect(500, 375, 100, 75));
+        yield return ("GE", new PixelRect(600, 375, 100, 75));
+        yield return ("GF", new PixelRect(700, 375, 100, 75));
+        yield return ("GG", new PixelRect(800, 375, 100, 75));
+        yield return ("GH", new PixelRect(900, 375, 100, 75));
+        yield return ("GI", new PixelRect(1000, 375, 100, 75));
+        yield return ("GL", new PixelRect(1100, 375, 100, 75));
+        yield return ("GM", new PixelRect(1200, 375, 100, 75));
+        yield return ("GN", new PixelRect(1300, 375, 100, 75));
+        yield return ("GP", new PixelRect(1400, 375, 100, 75));
+        yield return ("GQ", new PixelRect(1500, 375, 100, 75));
+        yield return ("GR", new PixelRect(1600, 375, 100, 75));
+        yield return ("GS", new PixelRect(0, 450, 100, 75));
+        yield return ("GT", new PixelRect(100, 450, 100, 75));
+        yield return ("GU", new PixelRect(200, 450, 100, 75));
+        yield return ("GW", new PixelRect(300, 450, 100, 75));
+        yield return ("GY", new PixelRect(400, 450, 100, 75));
+        yield return ("HK", new PixelRect(500, 450, 100, 75));
+        yield return ("HM", new PixelRect(600, 450, 100, 75));
+        yield return ("HN", new PixelRect(700, 450, 100, 75));
+        yield return ("HR", new PixelRect(800, 450, 100, 75));
+        yield return ("HT", new PixelRect(900, 450, 100, 75));
+        yield return ("HU", new PixelRect(1000, 450, 100, 75));
+        yield return ("IC", new PixelRect(1100, 450, 100, 75));
+        yield return ("ID", new PixelRect(1200, 450, 100, 75));
+        yield return ("IE", new PixelRect(1300, 450, 100, 75));
+        yield return ("IL", new PixelRect(1400, 450, 100, 75));
+        yield return ("IM", new PixelRect(1500, 450, 100, 75));
+        yield return ("IN", new PixelRect(1600, 450, 100, 75));
+        yield return ("IO", new PixelRect(0, 525, 100, 75));
+        yield return ("IQ", new PixelRect(100, 525, 100, 75));
+        yield return ("IR", new PixelRect(200, 525, 100, 75));
+        yield return ("IS", new PixelRect(300, 525, 100, 75));
+        yield return ("IT", new PixelRect(400, 525, 100, 75));
+        yield return ("JE", new PixelRect(500, 525, 100, 75));
+        yield return ("JM", new PixelRect(600, 525, 100, 75));
+        yield return ("JO", new PixelRect(700, 525, 100, 75));
+        yield return ("JP", new PixelRect(800, 525, 100, 75));
+        yield return ("KE", new PixelRect(900, 525, 100, 75));
+        yield return ("KG", new PixelRect(1000, 525, 100, 75));
+        yield return ("KH", new PixelRect(1100, 525, 100, 75));
+        yield return ("KI", new PixelRect(1200, 525, 100, 75));
+        yield return ("KM", new PixelRect(1300, 525, 100, 75));
+        yield return ("KN", new PixelRect(1400, 525, 100, 75));
+        yield return ("KP", new PixelRect(1500, 525, 100, 75));
+        yield return ("KR", new PixelRect(1600, 525, 100, 75));
+        yield return ("KW", new PixelRect(0, 600, 100, 75));
+        yield return ("KY", new PixelRect(100, 600, 100, 75));
+        yield return ("KZ", new PixelRect(200, 600, 100, 75));
+        yield return ("LA", new PixelRect(300, 600, 100, 75));
+        yield return ("LB", new PixelRect(400, 600, 100, 75));
+        yield return ("LC", new PixelRect(500, 600, 100, 75));
+        yield return ("LI", new PixelRect(600, 600, 100, 75));
+        yield return ("LK", new PixelRect(700, 600, 100, 75));
+        yield return ("LR", new PixelRect(800, 600, 100, 75));
+        yield return ("LS", new PixelRect(900, 600, 100, 75));
+        yield return ("LT", new PixelRect(1000, 600, 100, 75));
+        yield return ("LU", new PixelRect(1100, 600, 100, 75));
+        yield return ("LV", new PixelRect(1200, 600, 100, 75));
+        yield return ("LY", new PixelRect(1300, 600, 100, 75));
+        yield return ("MA", new PixelRect(1400, 600, 100, 75));
+        yield return ("MC", new PixelRect(1500, 600, 100, 75));
+        yield return ("MD", new PixelRect(1600, 600, 100, 75));
+        yield return ("ME", new PixelRect(0, 675, 100, 75));
+        yield return ("MF", new PixelRect(100, 675, 100, 75));
+        yield return ("MG", new PixelRect(200, 675, 100, 75));
+        yield return ("MH", new PixelRect(300, 675, 100, 75));
+        yield return ("MK", new PixelRect(400, 675, 100, 75));
+        yield return ("ML", new PixelRect(500, 675, 100, 75));
+        yield return ("MM", new PixelRect(600, 675, 100, 75));
+        yield return ("MN", new PixelRect(700, 675, 100, 75));
+        yield return ("MO", new PixelRect(800, 675, 100, 75));
+        yield return ("MP", new PixelRect(900, 675, 100, 75));
+        yield return ("MQ", new PixelRect(1000, 675, 100, 75));
+        yield return ("MR", new PixelRect(1100, 675, 100, 75));
+        yield return ("MS", new PixelRect(1200, 675, 100, 75));
+        yield return ("MT", new PixelRect(1300, 675, 100, 75));
+        yield return ("MU", new PixelRect(1400, 675, 100, 75));
+        yield return ("MV", new PixelRect(1500, 675, 100, 75));
+        yield return ("MW", new PixelRect(1600, 675, 100, 75));
+        yield return ("MX", new PixelRect(0, 750, 100, 75));
+        yield return ("MY", new PixelRect(100, 750, 100, 75));
+        yield return ("MZ", new PixelRect(200, 750, 100, 75));
+        yield return ("NA", new PixelRect(300, 750, 100, 75));
+        yield return ("NC", new PixelRect(400, 750, 100, 75));
+        yield return ("NE", new PixelRect(500, 750, 100, 75));
+        yield return ("NF", new PixelRect(600, 750, 100, 75));
+        yield return ("NG", new PixelRect(700, 750, 100, 75));
+        yield return ("NI", new PixelRect(800, 750, 100, 75));
+        yield return ("NL", new PixelRect(900, 750, 100, 75));
+        yield return ("NO", new PixelRect(1000, 750, 100, 75));
+        yield return ("NP", new PixelRect(1100, 750, 100, 75));
+        yield return ("NR", new PixelRect(1200, 750, 100, 75));
+        yield return ("NU", new PixelRect(1300, 750, 100, 75));
+        yield return ("NZ", new PixelRect(1400, 750, 100, 75));
+        yield return ("OM", new PixelRect(1500, 750, 100, 75));
+        yield return ("PA", new PixelRect(1600, 750, 100, 75));
+        yield return ("PE", new PixelRect(0, 825, 100, 75));
+        yield return ("PF", new PixelRect(100, 825, 100, 75));
+        yield return ("PG", new PixelRect(200, 825, 100, 75));
+        yield return ("PH", new PixelRect(300, 825, 100, 75));
+        yield return ("PK", new PixelRect(400, 825, 100, 75));
+        yield return ("PL", new PixelRect(500, 825, 100, 75));
+        yield return ("PM", new PixelRect(600, 825, 100, 75));
+        yield return ("PN", new PixelRect(700, 825, 100, 75));
+        yield return ("PR", new PixelRect(800, 825, 100, 75));
+        yield return ("PS", new PixelRect(900, 825, 100, 75));
+        yield return ("PT", new PixelRect(1000, 825, 100, 75));
+        yield return ("PW", new PixelRect(1100, 825, 100, 75));
+        yield return ("PY", new PixelRect(1200, 825, 100, 75));
+        yield return ("QA", new PixelRect(1300, 825, 100, 75));
+        yield return ("RE", new PixelRect(1400, 825, 100, 75));
+        yield return ("RO", new PixelRect(1500, 825, 100, 75));
+        yield return ("RS", new PixelRect(1600, 825, 100, 75));
+        yield return ("RU", new PixelRect(0, 900, 100, 75));
+        yield return ("RW", new PixelRect(100, 900, 100, 75));
+        yield return ("SA", new PixelRect(200, 900, 100, 75));
+        yield return ("SB", new PixelRect(300, 900, 100, 75));
+        yield return ("SC", new PixelRect(400, 900, 100, 75));
+        yield return ("SD", new PixelRect(500, 900, 100, 75));
+        yield return ("SE", new PixelRect(600, 900, 100, 75));
+        yield return ("SG", new PixelRect(700, 900, 100, 75));
+        yield return ("SH", new PixelRect(800, 900, 100, 75));
+        yield return ("SH-AC", new PixelRect(900, 900, 100, 75));
+        yield return ("SH-HL", new PixelRect(1000, 900, 100, 75));
+        yield return ("SH-TA", new PixelRect(1100, 900, 100, 75));
+        yield return ("SI", new PixelRect(1200, 900, 100, 75));
+        yield return ("SJ", new PixelRect(1300, 900, 100, 75));
+        yield return ("SK", new PixelRect(1400, 900, 100, 75));
+        yield return ("SL", new PixelRect(1500, 900, 100, 75));
+        yield return ("SM", new PixelRect(1600, 900, 100, 75));
+        yield return ("SN", new PixelRect(0, 975, 100, 75));
+        yield return ("SO", new PixelRect(100, 975, 100, 75));
+        yield return ("SR", new PixelRect(200, 975, 100, 75));
+        yield return ("SS", new PixelRect(300, 975, 100, 75));
+        yield return ("ST", new PixelRect(400, 975, 100, 75));
+        yield return ("SV", new PixelRect(500, 975, 100, 75));
+        yield return ("SX", new PixelRect(600, 975, 100, 75));
+        yield return ("SY", new PixelRect(700, 975, 100, 75));
+        yield return ("SZ", new PixelRect(800, 975, 100, 75));
+        yield return ("TC", new PixelRect(900, 975, 100, 75));
+        yield return ("TD", new PixelRect(1000, 975, 100, 75));
+        yield return ("TF", new PixelRect(1100, 975, 100, 75));
+        yield return ("TG", new PixelRect(1200, 975, 100, 75));
+        yield return ("TH", new PixelRect(1300, 975, 100, 75));
+        yield return ("TJ", new PixelRect(1400, 975, 100, 75));
+        yield return ("TK", new PixelRect(1500, 975, 100, 75));
+        yield return ("TL", new PixelRect(1600, 975, 100, 75));
+        yield return ("TM", new PixelRect(0, 1050, 100, 75));
+        yield return ("TN", new PixelRect(100, 1050, 100, 75));
+        yield return ("TO", new PixelRect(200, 1050, 100, 75));
+        yield return ("TR", new PixelRect(300, 1050, 100, 75));
+        yield return ("TT", new PixelRect(400, 1050, 100, 75));
+        yield return ("TV", new PixelRect(500, 1050, 100, 75));
+        yield return ("TW", new PixelRect(600, 1050, 100, 75));
+        yield return ("TZ", new PixelRect(700, 1050, 100, 75));
+        yield return ("UA", new PixelRect(800, 1050, 100, 75));
+        yield return ("UG", new PixelRect(900, 1050, 100, 75));
+        yield return ("UM", new PixelRect(1000, 1050, 100, 75));
+        yield return ("UN", new PixelRect(1100, 1050, 100, 75));
+        yield return ("US", new PixelRect(1200, 1050, 100, 75));
+        yield return ("UY", new PixelRect(1300, 1050, 100, 75));
+        yield return ("UZ", new PixelRect(1400, 1050, 100, 75));
+        yield return ("VA", new PixelRect(1500, 1050, 100, 75));
+        yield return ("VC", new PixelRect(1600, 1050, 100, 75));
+        yield return ("VE", new PixelRect(0, 1125, 100, 75));
+        yield return ("VG", new PixelRect(100, 1125, 100, 75));
+        yield return ("VI", new PixelRect(200, 1125, 100, 75));
+        yield return ("VN", new PixelRect(300, 1125, 100, 75));
+        yield return ("VU", new PixelRect(400, 1125, 100, 75));
+        yield return ("WF", new PixelRect(500, 1125, 100, 75));
+        yield return ("WS", new PixelRect(600, 1125, 100, 75));
+        yield return ("XK", new PixelRect(700, 1125, 100, 75));
+        yield return ("XX", new PixelRect(800, 1125, 100, 75));
+        yield return ("YE", new PixelRect(900, 1125, 100, 75));
+        yield return ("YT", new PixelRect(1000, 1125, 100, 75));
+        yield return ("ZA", new PixelRect(1100, 1125, 100, 75));
+        yield return ("ZM", new PixelRect(1200, 1125, 100, 75));
+        yield return ("ZW", new PixelRect(1300, 1125, 100, 75));
     }
-    
+
     /// <summary>
-    /// Get small flag rectangle by code
+    /// Get all small flag rectangles (20x15)
     /// </summary>
-    public static PixelRect? GetSmallRect(string code)
+    public static IEnumerable<(string Code, PixelRect Rect)> GetSmallFlags()
     {
-        return code.ToUpperInvariant() switch
-        {
-            "AD" => new PixelRect(0, 0, 20, 15),
-            "AE" => new PixelRect(20, 0, 20, 15),
-            "AF" => new PixelRect(40, 0, 20, 15),
-            "AG" => new PixelRect(60, 0, 20, 15),
-            "AI" => new PixelRect(80, 0, 20, 15),
-            "AL" => new PixelRect(100, 0, 20, 15),
-            "AM" => new PixelRect(120, 0, 20, 15),
-            "AO" => new PixelRect(140, 0, 20, 15),
-            "AQ" => new PixelRect(160, 0, 20, 15),
-            "AR" => new PixelRect(180, 0, 20, 15),
-            "ARAB" => new PixelRect(200, 0, 20, 15),
-            "AS" => new PixelRect(220, 0, 20, 15),
-            "AT" => new PixelRect(240, 0, 20, 15),
-            "AU" => new PixelRect(260, 0, 20, 15),
-            "AW" => new PixelRect(280, 0, 20, 15),
-            "AX" => new PixelRect(300, 0, 20, 15),
-            "AZ" => new PixelRect(320, 0, 20, 15),
-            "BA" => new PixelRect(0, 15, 20, 15),
-            "BB" => new PixelRect(20, 15, 20, 15),
-            "BD" => new PixelRect(40, 15, 20, 15),
-            "BE" => new PixelRect(60, 15, 20, 15),
-            "BF" => new PixelRect(80, 15, 20, 15),
-            "BG" => new PixelRect(100, 15, 20, 15),
-            "BH" => new PixelRect(120, 15, 20, 15),
-            "BI" => new PixelRect(140, 15, 20, 15),
-            "BJ" => new PixelRect(160, 15, 20, 15),
-            "BL" => new PixelRect(180, 15, 20, 15),
-            "BM" => new PixelRect(200, 15, 20, 15),
-            "BN" => new PixelRect(220, 15, 20, 15),
-            "BO" => new PixelRect(240, 15, 20, 15),
-            "BQ" => new PixelRect(260, 15, 20, 15),
-            "BR" => new PixelRect(280, 15, 20, 15),
-            "BS" => new PixelRect(300, 15, 20, 15),
-            "BT" => new PixelRect(320, 15, 20, 15),
-            "BV" => new PixelRect(0, 30, 20, 15),
-            "BW" => new PixelRect(20, 30, 20, 15),
-            "BY" => new PixelRect(40, 30, 20, 15),
-            "BZ" => new PixelRect(60, 30, 20, 15),
-            "CA" => new PixelRect(80, 30, 20, 15),
-            "CC" => new PixelRect(100, 30, 20, 15),
-            "CD" => new PixelRect(120, 30, 20, 15),
-            "CEFTA" => new PixelRect(140, 30, 20, 15),
-            "CF" => new PixelRect(160, 30, 20, 15),
-            "CG" => new PixelRect(180, 30, 20, 15),
-            "CH" => new PixelRect(200, 30, 20, 15),
-            "CI" => new PixelRect(220, 30, 20, 15),
-            "CK" => new PixelRect(240, 30, 20, 15),
-            "CL" => new PixelRect(260, 30, 20, 15),
-            "CM" => new PixelRect(280, 30, 20, 15),
-            "CN" => new PixelRect(300, 30, 20, 15),
-            "CO" => new PixelRect(320, 30, 20, 15),
-            "CP" => new PixelRect(0, 45, 20, 15),
-            "CR" => new PixelRect(20, 45, 20, 15),
-            "CU" => new PixelRect(40, 45, 20, 15),
-            "CV" => new PixelRect(60, 45, 20, 15),
-            "CW" => new PixelRect(80, 45, 20, 15),
-            "CX" => new PixelRect(100, 45, 20, 15),
-            "CY" => new PixelRect(120, 45, 20, 15),
-            "CZ" => new PixelRect(140, 45, 20, 15),
-            "DE" => new PixelRect(160, 45, 20, 15),
-            "DG" => new PixelRect(180, 45, 20, 15),
-            "DJ" => new PixelRect(200, 45, 20, 15),
-            "DK" => new PixelRect(220, 45, 20, 15),
-            "DM" => new PixelRect(240, 45, 20, 15),
-            "DO" => new PixelRect(260, 45, 20, 15),
-            "DZ" => new PixelRect(280, 45, 20, 15),
-            "EAC" => new PixelRect(300, 45, 20, 15),
-            "EC" => new PixelRect(320, 45, 20, 15),
-            "EE" => new PixelRect(0, 60, 20, 15),
-            "EG" => new PixelRect(20, 60, 20, 15),
-            "EH" => new PixelRect(40, 60, 20, 15),
-            "ER" => new PixelRect(60, 60, 20, 15),
-            "ES" => new PixelRect(80, 60, 20, 15),
-            "ES-CT" => new PixelRect(100, 60, 20, 15),
-            "ES-GA" => new PixelRect(120, 60, 20, 15),
-            "ES-PV" => new PixelRect(140, 60, 20, 15),
-            "ET" => new PixelRect(160, 60, 20, 15),
-            "EU" => new PixelRect(180, 60, 20, 15),
-            "FI" => new PixelRect(200, 60, 20, 15),
-            "FJ" => new PixelRect(220, 60, 20, 15),
-            "FK" => new PixelRect(240, 60, 20, 15),
-            "FM" => new PixelRect(260, 60, 20, 15),
-            "FO" => new PixelRect(280, 60, 20, 15),
-            "FR" => new PixelRect(300, 60, 20, 15),
-            "GA" => new PixelRect(320, 60, 20, 15),
-            "GB" => new PixelRect(0, 75, 20, 15),
-            "GB-ENG" => new PixelRect(20, 75, 20, 15),
-            "GB-NIR" => new PixelRect(40, 75, 20, 15),
-            "GB-SCT" => new PixelRect(60, 75, 20, 15),
-            "GB-WLS" => new PixelRect(80, 75, 20, 15),
-            "GD" => new PixelRect(100, 75, 20, 15),
-            "GE" => new PixelRect(120, 75, 20, 15),
-            "GF" => new PixelRect(140, 75, 20, 15),
-            "GG" => new PixelRect(160, 75, 20, 15),
-            "GH" => new PixelRect(180, 75, 20, 15),
-            "GI" => new PixelRect(200, 75, 20, 15),
-            "GL" => new PixelRect(220, 75, 20, 15),
-            "GM" => new PixelRect(240, 75, 20, 15),
-            "GN" => new PixelRect(260, 75, 20, 15),
-            "GP" => new PixelRect(280, 75, 20, 15),
-            "GQ" => new PixelRect(300, 75, 20, 15),
-            "GR" => new PixelRect(320, 75, 20, 15),
-            "GS" => new PixelRect(0, 90, 20, 15),
-            "GT" => new PixelRect(20, 90, 20, 15),
-            "GU" => new PixelRect(40, 90, 20, 15),
-            "GW" => new PixelRect(60, 90, 20, 15),
-            "GY" => new PixelRect(80, 90, 20, 15),
-            "HK" => new PixelRect(100, 90, 20, 15),
-            "HM" => new PixelRect(120, 90, 20, 15),
-            "HN" => new PixelRect(140, 90, 20, 15),
-            "HR" => new PixelRect(160, 90, 20, 15),
-            "HT" => new PixelRect(180, 90, 20, 15),
-            "HU" => new PixelRect(200, 90, 20, 15),
-            "IC" => new PixelRect(220, 90, 20, 15),
-            "ID" => new PixelRect(240, 90, 20, 15),
-            "IE" => new PixelRect(260, 90, 20, 15),
-            "IL" => new PixelRect(280, 90, 20, 15),
-            "IM" => new PixelRect(300, 90, 20, 15),
-            "IN" => new PixelRect(320, 90, 20, 15),
-            "IO" => new PixelRect(0, 105, 20, 15),
-            "IQ" => new PixelRect(20, 105, 20, 15),
-            "IR" => new PixelRect(40, 105, 20, 15),
-            "IS" => new PixelRect(60, 105, 20, 15),
-            "IT" => new PixelRect(80, 105, 20, 15),
-            "JE" => new PixelRect(100, 105, 20, 15),
-            "JM" => new PixelRect(120, 105, 20, 15),
-            "JO" => new PixelRect(140, 105, 20, 15),
-            "JP" => new PixelRect(160, 105, 20, 15),
-            "KE" => new PixelRect(180, 105, 20, 15),
-            "KG" => new PixelRect(200, 105, 20, 15),
-            "KH" => new PixelRect(220, 105, 20, 15),
-            "KI" => new PixelRect(240, 105, 20, 15),
-            "KM" => new PixelRect(260, 105, 20, 15),
-            "KN" => new PixelRect(280, 105, 20, 15),
-            "KP" => new PixelRect(300, 105, 20, 15),
-            "KR" => new PixelRect(320, 105, 20, 15),
-            "KW" => new PixelRect(0, 120, 20, 15),
-            "KY" => new PixelRect(20, 120, 20, 15),
-            "KZ" => new PixelRect(40, 120, 20, 15),
-            "LA" => new PixelRect(60, 120, 20, 15),
-            "LB" => new PixelRect(80, 120, 20, 15),
-            "LC" => new PixelRect(100, 120, 20, 15),
-            "LI" => new PixelRect(120, 120, 20, 15),
-            "LK" => new PixelRect(140, 120, 20, 15),
-            "LR" => new PixelRect(160, 120, 20, 15),
-            "LS" => new PixelRect(180, 120, 20, 15),
-            "LT" => new PixelRect(200, 120, 20, 15),
-            "LU" => new PixelRect(220, 120, 20, 15),
-            "LV" => new PixelRect(240, 120, 20, 15),
-            "LY" => new PixelRect(260, 120, 20, 15),
-            "MA" => new PixelRect(280, 120, 20, 15),
-            "MC" => new PixelRect(300, 120, 20, 15),
-            "MD" => new PixelRect(320, 120, 20, 15),
-            "ME" => new PixelRect(0, 135, 20, 15),
-            "MF" => new PixelRect(20, 135, 20, 15),
-            "MG" => new PixelRect(40, 135, 20, 15),
-            "MH" => new PixelRect(60, 135, 20, 15),
-            "MK" => new PixelRect(80, 135, 20, 15),
-            "ML" => new PixelRect(100, 135, 20, 15),
-            "MM" => new PixelRect(120, 135, 20, 15),
-            "MN" => new PixelRect(140, 135, 20, 15),
-            "MO" => new PixelRect(160, 135, 20, 15),
-            "MP" => new PixelRect(180, 135, 20, 15),
-            "MQ" => new PixelRect(200, 135, 20, 15),
-            "MR" => new PixelRect(220, 135, 20, 15),
-            "MS" => new PixelRect(240, 135, 20, 15),
-            "MT" => new PixelRect(260, 135, 20, 15),
-            "MU" => new PixelRect(280, 135, 20, 15),
-            "MV" => new PixelRect(300, 135, 20, 15),
-            "MW" => new PixelRect(320, 135, 20, 15),
-            "MX" => new PixelRect(0, 150, 20, 15),
-            "MY" => new PixelRect(20, 150, 20, 15),
-            "MZ" => new PixelRect(40, 150, 20, 15),
-            "NA" => new PixelRect(60, 150, 20, 15),
-            "NC" => new PixelRect(80, 150, 20, 15),
-            "NE" => new PixelRect(100, 150, 20, 15),
-            "NF" => new PixelRect(120, 150, 20, 15),
-            "NG" => new PixelRect(140, 150, 20, 15),
-            "NI" => new PixelRect(160, 150, 20, 15),
-            "NL" => new PixelRect(180, 150, 20, 15),
-            "NO" => new PixelRect(200, 150, 20, 15),
-            "NP" => new PixelRect(220, 150, 20, 15),
-            "NR" => new PixelRect(240, 150, 20, 15),
-            "NU" => new PixelRect(260, 150, 20, 15),
-            "NZ" => new PixelRect(280, 150, 20, 15),
-            "OM" => new PixelRect(300, 150, 20, 15),
-            "PA" => new PixelRect(320, 150, 20, 15),
-            "PC" => new PixelRect(0, 165, 20, 15),
-            "PE" => new PixelRect(20, 165, 20, 15),
-            "PF" => new PixelRect(40, 165, 20, 15),
-            "PG" => new PixelRect(60, 165, 20, 15),
-            "PH" => new PixelRect(80, 165, 20, 15),
-            "PK" => new PixelRect(100, 165, 20, 15),
-            "PL" => new PixelRect(120, 165, 20, 15),
-            "PM" => new PixelRect(140, 165, 20, 15),
-            "PN" => new PixelRect(160, 165, 20, 15),
-            "PR" => new PixelRect(180, 165, 20, 15),
-            "PS" => new PixelRect(200, 165, 20, 15),
-            "PT" => new PixelRect(220, 165, 20, 15),
-            "PW" => new PixelRect(240, 165, 20, 15),
-            "PY" => new PixelRect(260, 165, 20, 15),
-            "QA" => new PixelRect(280, 165, 20, 15),
-            "RE" => new PixelRect(300, 165, 20, 15),
-            "RO" => new PixelRect(320, 165, 20, 15),
-            "RS" => new PixelRect(0, 180, 20, 15),
-            "RU" => new PixelRect(20, 180, 20, 15),
-            "RW" => new PixelRect(40, 180, 20, 15),
-            "SA" => new PixelRect(60, 180, 20, 15),
-            "SB" => new PixelRect(80, 180, 20, 15),
-            "SC" => new PixelRect(100, 180, 20, 15),
-            "SD" => new PixelRect(120, 180, 20, 15),
-            "SE" => new PixelRect(140, 180, 20, 15),
-            "SG" => new PixelRect(160, 180, 20, 15),
-            "SH" => new PixelRect(180, 180, 20, 15),
-            "SH-AC" => new PixelRect(200, 180, 20, 15),
-            "SH-HL" => new PixelRect(220, 180, 20, 15),
-            "SH-TA" => new PixelRect(240, 180, 20, 15),
-            "SI" => new PixelRect(260, 180, 20, 15),
-            "SJ" => new PixelRect(280, 180, 20, 15),
-            "SK" => new PixelRect(300, 180, 20, 15),
-            "SL" => new PixelRect(320, 180, 20, 15),
-            "SM" => new PixelRect(0, 195, 20, 15),
-            "SN" => new PixelRect(20, 195, 20, 15),
-            "SO" => new PixelRect(40, 195, 20, 15),
-            "SR" => new PixelRect(60, 195, 20, 15),
-            "SS" => new PixelRect(80, 195, 20, 15),
-            "ST" => new PixelRect(100, 195, 20, 15),
-            "SV" => new PixelRect(120, 195, 20, 15),
-            "SX" => new PixelRect(140, 195, 20, 15),
-            "SY" => new PixelRect(160, 195, 20, 15),
-            "SZ" => new PixelRect(180, 195, 20, 15),
-            "TC" => new PixelRect(200, 195, 20, 15),
-            "TD" => new PixelRect(220, 195, 20, 15),
-            "TF" => new PixelRect(240, 195, 20, 15),
-            "TG" => new PixelRect(260, 195, 20, 15),
-            "TH" => new PixelRect(280, 195, 20, 15),
-            "TJ" => new PixelRect(300, 195, 20, 15),
-            "TK" => new PixelRect(320, 195, 20, 15),
-            "TL" => new PixelRect(0, 210, 20, 15),
-            "TM" => new PixelRect(20, 210, 20, 15),
-            "TN" => new PixelRect(40, 210, 20, 15),
-            "TO" => new PixelRect(60, 210, 20, 15),
-            "TR" => new PixelRect(80, 210, 20, 15),
-            "TT" => new PixelRect(100, 210, 20, 15),
-            "TV" => new PixelRect(120, 210, 20, 15),
-            "TW" => new PixelRect(140, 210, 20, 15),
-            "TZ" => new PixelRect(160, 210, 20, 15),
-            "UA" => new PixelRect(180, 210, 20, 15),
-            "UG" => new PixelRect(200, 210, 20, 15),
-            "UM" => new PixelRect(220, 210, 20, 15),
-            "UN" => new PixelRect(240, 210, 20, 15),
-            "US" => new PixelRect(260, 210, 20, 15),
-            "UY" => new PixelRect(280, 210, 20, 15),
-            "UZ" => new PixelRect(300, 210, 20, 15),
-            "VA" => new PixelRect(320, 210, 20, 15),
-            "VC" => new PixelRect(0, 225, 20, 15),
-            "VE" => new PixelRect(20, 225, 20, 15),
-            "VG" => new PixelRect(40, 225, 20, 15),
-            "VI" => new PixelRect(60, 225, 20, 15),
-            "VN" => new PixelRect(80, 225, 20, 15),
-            "VU" => new PixelRect(100, 225, 20, 15),
-            "WF" => new PixelRect(120, 225, 20, 15),
-            "WS" => new PixelRect(140, 225, 20, 15),
-            "XK" => new PixelRect(160, 225, 20, 15),
-            "XX" => new PixelRect(180, 225, 20, 15),
-            "YE" => new PixelRect(200, 225, 20, 15),
-            "YT" => new PixelRect(220, 225, 20, 15),
-            "ZA" => new PixelRect(240, 225, 20, 15),
-            "ZM" => new PixelRect(260, 225, 20, 15),
-            "ZW" => new PixelRect(280, 225, 20, 15),
-            _ => null
-        };
+        yield return ("AD", new PixelRect(0, 0, 20, 15));
+        yield return ("AE", new PixelRect(20, 0, 20, 15));
+        yield return ("AF", new PixelRect(40, 0, 20, 15));
+        yield return ("AG", new PixelRect(60, 0, 20, 15));
+        yield return ("AI", new PixelRect(80, 0, 20, 15));
+        yield return ("AL", new PixelRect(100, 0, 20, 15));
+        yield return ("AM", new PixelRect(120, 0, 20, 15));
+        yield return ("AO", new PixelRect(140, 0, 20, 15));
+        yield return ("AQ", new PixelRect(160, 0, 20, 15));
+        yield return ("AR", new PixelRect(180, 0, 20, 15));
+        yield return ("ARAB", new PixelRect(200, 0, 20, 15));
+        yield return ("AS", new PixelRect(220, 0, 20, 15));
+        yield return ("AT", new PixelRect(240, 0, 20, 15));
+        yield return ("AU", new PixelRect(260, 0, 20, 15));
+        yield return ("AW", new PixelRect(280, 0, 20, 15));
+        yield return ("AX", new PixelRect(300, 0, 20, 15));
+        yield return ("AZ", new PixelRect(320, 0, 20, 15));
+        yield return ("BA", new PixelRect(0, 15, 20, 15));
+        yield return ("BB", new PixelRect(20, 15, 20, 15));
+        yield return ("BD", new PixelRect(40, 15, 20, 15));
+        yield return ("BE", new PixelRect(60, 15, 20, 15));
+        yield return ("BF", new PixelRect(80, 15, 20, 15));
+        yield return ("BG", new PixelRect(100, 15, 20, 15));
+        yield return ("BH", new PixelRect(120, 15, 20, 15));
+        yield return ("BI", new PixelRect(140, 15, 20, 15));
+        yield return ("BJ", new PixelRect(160, 15, 20, 15));
+        yield return ("BL", new PixelRect(180, 15, 20, 15));
+        yield return ("BM", new PixelRect(200, 15, 20, 15));
+        yield return ("BN", new PixelRect(220, 15, 20, 15));
+        yield return ("BO", new PixelRect(240, 15, 20, 15));
+        yield return ("BQ", new PixelRect(260, 15, 20, 15));
+        yield return ("BR", new PixelRect(280, 15, 20, 15));
+        yield return ("BS", new PixelRect(300, 15, 20, 15));
+        yield return ("BT", new PixelRect(320, 15, 20, 15));
+        yield return ("BV", new PixelRect(0, 30, 20, 15));
+        yield return ("BW", new PixelRect(20, 30, 20, 15));
+        yield return ("BY", new PixelRect(40, 30, 20, 15));
+        yield return ("BZ", new PixelRect(60, 30, 20, 15));
+        yield return ("CA", new PixelRect(80, 30, 20, 15));
+        yield return ("CC", new PixelRect(100, 30, 20, 15));
+        yield return ("CD", new PixelRect(120, 30, 20, 15));
+        yield return ("CEFTA", new PixelRect(140, 30, 20, 15));
+        yield return ("CF", new PixelRect(160, 30, 20, 15));
+        yield return ("CG", new PixelRect(180, 30, 20, 15));
+        yield return ("CH", new PixelRect(200, 30, 20, 15));
+        yield return ("CI", new PixelRect(220, 30, 20, 15));
+        yield return ("CK", new PixelRect(240, 30, 20, 15));
+        yield return ("CL", new PixelRect(260, 30, 20, 15));
+        yield return ("CM", new PixelRect(280, 30, 20, 15));
+        yield return ("CN", new PixelRect(300, 30, 20, 15));
+        yield return ("CO", new PixelRect(320, 30, 20, 15));
+        yield return ("CP", new PixelRect(0, 45, 20, 15));
+        yield return ("CR", new PixelRect(20, 45, 20, 15));
+        yield return ("CU", new PixelRect(40, 45, 20, 15));
+        yield return ("CV", new PixelRect(60, 45, 20, 15));
+        yield return ("CW", new PixelRect(80, 45, 20, 15));
+        yield return ("CX", new PixelRect(100, 45, 20, 15));
+        yield return ("CY", new PixelRect(120, 45, 20, 15));
+        yield return ("CZ", new PixelRect(140, 45, 20, 15));
+        yield return ("DE", new PixelRect(160, 45, 20, 15));
+        yield return ("DG", new PixelRect(180, 45, 20, 15));
+        yield return ("DJ", new PixelRect(200, 45, 20, 15));
+        yield return ("DK", new PixelRect(220, 45, 20, 15));
+        yield return ("DM", new PixelRect(240, 45, 20, 15));
+        yield return ("DO", new PixelRect(260, 45, 20, 15));
+        yield return ("DZ", new PixelRect(280, 45, 20, 15));
+        yield return ("EAC", new PixelRect(300, 45, 20, 15));
+        yield return ("EC", new PixelRect(320, 45, 20, 15));
+        yield return ("EE", new PixelRect(0, 60, 20, 15));
+        yield return ("EG", new PixelRect(20, 60, 20, 15));
+        yield return ("EH", new PixelRect(40, 60, 20, 15));
+        yield return ("ER", new PixelRect(60, 60, 20, 15));
+        yield return ("ES", new PixelRect(80, 60, 20, 15));
+        yield return ("ES-CT", new PixelRect(100, 60, 20, 15));
+        yield return ("ES-GA", new PixelRect(120, 60, 20, 15));
+        yield return ("ES-PV", new PixelRect(140, 60, 20, 15));
+        yield return ("ET", new PixelRect(160, 60, 20, 15));
+        yield return ("EU", new PixelRect(180, 60, 20, 15));
+        yield return ("FI", new PixelRect(200, 60, 20, 15));
+        yield return ("FJ", new PixelRect(220, 60, 20, 15));
+        yield return ("FK", new PixelRect(240, 60, 20, 15));
+        yield return ("FM", new PixelRect(260, 60, 20, 15));
+        yield return ("FO", new PixelRect(280, 60, 20, 15));
+        yield return ("FR", new PixelRect(300, 60, 20, 15));
+        yield return ("GA", new PixelRect(320, 60, 20, 15));
+        yield return ("GB", new PixelRect(0, 75, 20, 15));
+        yield return ("GB-ENG", new PixelRect(20, 75, 20, 15));
+        yield return ("GB-NIR", new PixelRect(40, 75, 20, 15));
+        yield return ("GB-SCT", new PixelRect(60, 75, 20, 15));
+        yield return ("GB-WLS", new PixelRect(80, 75, 20, 15));
+        yield return ("GD", new PixelRect(100, 75, 20, 15));
+        yield return ("GE", new PixelRect(120, 75, 20, 15));
+        yield return ("GF", new PixelRect(140, 75, 20, 15));
+        yield return ("GG", new PixelRect(160, 75, 20, 15));
+        yield return ("GH", new PixelRect(180, 75, 20, 15));
+        yield return ("GI", new PixelRect(200, 75, 20, 15));
+        yield return ("GL", new PixelRect(220, 75, 20, 15));
+        yield return ("GM", new PixelRect(240, 75, 20, 15));
+        yield return ("GN", new PixelRect(260, 75, 20, 15));
+        yield return ("GP", new PixelRect(280, 75, 20, 15));
+        yield return ("GQ", new PixelRect(300, 75, 20, 15));
+        yield return ("GR", new PixelRect(320, 75, 20, 15));
+        yield return ("GS", new PixelRect(0, 90, 20, 15));
+        yield return ("GT", new PixelRect(20, 90, 20, 15));
+        yield return ("GU", new PixelRect(40, 90, 20, 15));
+        yield return ("GW", new PixelRect(60, 90, 20, 15));
+        yield return ("GY", new PixelRect(80, 90, 20, 15));
+        yield return ("HK", new PixelRect(100, 90, 20, 15));
+        yield return ("HM", new PixelRect(120, 90, 20, 15));
+        yield return ("HN", new PixelRect(140, 90, 20, 15));
+        yield return ("HR", new PixelRect(160, 90, 20, 15));
+        yield return ("HT", new PixelRect(180, 90, 20, 15));
+        yield return ("HU", new PixelRect(200, 90, 20, 15));
+        yield return ("IC", new PixelRect(220, 90, 20, 15));
+        yield return ("ID", new PixelRect(240, 90, 20, 15));
+        yield return ("IE", new PixelRect(260, 90, 20, 15));
+        yield return ("IL", new PixelRect(280, 90, 20, 15));
+        yield return ("IM", new PixelRect(300, 90, 20, 15));
+        yield return ("IN", new PixelRect(320, 90, 20, 15));
+        yield return ("IO", new PixelRect(0, 105, 20, 15));
+        yield return ("IQ", new PixelRect(20, 105, 20, 15));
+        yield return ("IR", new PixelRect(40, 105, 20, 15));
+        yield return ("IS", new PixelRect(60, 105, 20, 15));
+        yield return ("IT", new PixelRect(80, 105, 20, 15));
+        yield return ("JE", new PixelRect(100, 105, 20, 15));
+        yield return ("JM", new PixelRect(120, 105, 20, 15));
+        yield return ("JO", new PixelRect(140, 105, 20, 15));
+        yield return ("JP", new PixelRect(160, 105, 20, 15));
+        yield return ("KE", new PixelRect(180, 105, 20, 15));
+        yield return ("KG", new PixelRect(200, 105, 20, 15));
+        yield return ("KH", new PixelRect(220, 105, 20, 15));
+        yield return ("KI", new PixelRect(240, 105, 20, 15));
+        yield return ("KM", new PixelRect(260, 105, 20, 15));
+        yield return ("KN", new PixelRect(280, 105, 20, 15));
+        yield return ("KP", new PixelRect(300, 105, 20, 15));
+        yield return ("KR", new PixelRect(320, 105, 20, 15));
+        yield return ("KW", new PixelRect(0, 120, 20, 15));
+        yield return ("KY", new PixelRect(20, 120, 20, 15));
+        yield return ("KZ", new PixelRect(40, 120, 20, 15));
+        yield return ("LA", new PixelRect(60, 120, 20, 15));
+        yield return ("LB", new PixelRect(80, 120, 20, 15));
+        yield return ("LC", new PixelRect(100, 120, 20, 15));
+        yield return ("LI", new PixelRect(120, 120, 20, 15));
+        yield return ("LK", new PixelRect(140, 120, 20, 15));
+        yield return ("LR", new PixelRect(160, 120, 20, 15));
+        yield return ("LS", new PixelRect(180, 120, 20, 15));
+        yield return ("LT", new PixelRect(200, 120, 20, 15));
+        yield return ("LU", new PixelRect(220, 120, 20, 15));
+        yield return ("LV", new PixelRect(240, 120, 20, 15));
+        yield return ("LY", new PixelRect(260, 120, 20, 15));
+        yield return ("MA", new PixelRect(280, 120, 20, 15));
+        yield return ("MC", new PixelRect(300, 120, 20, 15));
+        yield return ("MD", new PixelRect(320, 120, 20, 15));
+        yield return ("ME", new PixelRect(0, 135, 20, 15));
+        yield return ("MF", new PixelRect(20, 135, 20, 15));
+        yield return ("MG", new PixelRect(40, 135, 20, 15));
+        yield return ("MH", new PixelRect(60, 135, 20, 15));
+        yield return ("MK", new PixelRect(80, 135, 20, 15));
+        yield return ("ML", new PixelRect(100, 135, 20, 15));
+        yield return ("MM", new PixelRect(120, 135, 20, 15));
+        yield return ("MN", new PixelRect(140, 135, 20, 15));
+        yield return ("MO", new PixelRect(160, 135, 20, 15));
+        yield return ("MP", new PixelRect(180, 135, 20, 15));
+        yield return ("MQ", new PixelRect(200, 135, 20, 15));
+        yield return ("MR", new PixelRect(220, 135, 20, 15));
+        yield return ("MS", new PixelRect(240, 135, 20, 15));
+        yield return ("MT", new PixelRect(260, 135, 20, 15));
+        yield return ("MU", new PixelRect(280, 135, 20, 15));
+        yield return ("MV", new PixelRect(300, 135, 20, 15));
+        yield return ("MW", new PixelRect(320, 135, 20, 15));
+        yield return ("MX", new PixelRect(0, 150, 20, 15));
+        yield return ("MY", new PixelRect(20, 150, 20, 15));
+        yield return ("MZ", new PixelRect(40, 150, 20, 15));
+        yield return ("NA", new PixelRect(60, 150, 20, 15));
+        yield return ("NC", new PixelRect(80, 150, 20, 15));
+        yield return ("NE", new PixelRect(100, 150, 20, 15));
+        yield return ("NF", new PixelRect(120, 150, 20, 15));
+        yield return ("NG", new PixelRect(140, 150, 20, 15));
+        yield return ("NI", new PixelRect(160, 150, 20, 15));
+        yield return ("NL", new PixelRect(180, 150, 20, 15));
+        yield return ("NO", new PixelRect(200, 150, 20, 15));
+        yield return ("NP", new PixelRect(220, 150, 20, 15));
+        yield return ("NR", new PixelRect(240, 150, 20, 15));
+        yield return ("NU", new PixelRect(260, 150, 20, 15));
+        yield return ("NZ", new PixelRect(280, 150, 20, 15));
+        yield return ("OM", new PixelRect(300, 150, 20, 15));
+        yield return ("PA", new PixelRect(320, 150, 20, 15));
+        yield return ("PE", new PixelRect(0, 165, 20, 15));
+        yield return ("PF", new PixelRect(20, 165, 20, 15));
+        yield return ("PG", new PixelRect(40, 165, 20, 15));
+        yield return ("PH", new PixelRect(60, 165, 20, 15));
+        yield return ("PK", new PixelRect(80, 165, 20, 15));
+        yield return ("PL", new PixelRect(100, 165, 20, 15));
+        yield return ("PM", new PixelRect(120, 165, 20, 15));
+        yield return ("PN", new PixelRect(140, 165, 20, 15));
+        yield return ("PR", new PixelRect(160, 165, 20, 15));
+        yield return ("PS", new PixelRect(180, 165, 20, 15));
+        yield return ("PT", new PixelRect(200, 165, 20, 15));
+        yield return ("PW", new PixelRect(220, 165, 20, 15));
+        yield return ("PY", new PixelRect(240, 165, 20, 15));
+        yield return ("QA", new PixelRect(260, 165, 20, 15));
+        yield return ("RE", new PixelRect(280, 165, 20, 15));
+        yield return ("RO", new PixelRect(300, 165, 20, 15));
+        yield return ("RS", new PixelRect(320, 165, 20, 15));
+        yield return ("RU", new PixelRect(0, 180, 20, 15));
+        yield return ("RW", new PixelRect(20, 180, 20, 15));
+        yield return ("SA", new PixelRect(40, 180, 20, 15));
+        yield return ("SB", new PixelRect(60, 180, 20, 15));
+        yield return ("SC", new PixelRect(80, 180, 20, 15));
+        yield return ("SD", new PixelRect(100, 180, 20, 15));
+        yield return ("SE", new PixelRect(120, 180, 20, 15));
+        yield return ("SG", new PixelRect(140, 180, 20, 15));
+        yield return ("SH", new PixelRect(160, 180, 20, 15));
+        yield return ("SH-AC", new PixelRect(180, 180, 20, 15));
+        yield return ("SH-HL", new PixelRect(200, 180, 20, 15));
+        yield return ("SH-TA", new PixelRect(220, 180, 20, 15));
+        yield return ("SI", new PixelRect(240, 180, 20, 15));
+        yield return ("SJ", new PixelRect(260, 180, 20, 15));
+        yield return ("SK", new PixelRect(280, 180, 20, 15));
+        yield return ("SL", new PixelRect(300, 180, 20, 15));
+        yield return ("SM", new PixelRect(320, 180, 20, 15));
+        yield return ("SN", new PixelRect(0, 195, 20, 15));
+        yield return ("SO", new PixelRect(20, 195, 20, 15));
+        yield return ("SR", new PixelRect(40, 195, 20, 15));
+        yield return ("SS", new PixelRect(60, 195, 20, 15));
+        yield return ("ST", new PixelRect(80, 195, 20, 15));
+        yield return ("SV", new PixelRect(100, 195, 20, 15));
+        yield return ("SX", new PixelRect(120, 195, 20, 15));
+        yield return ("SY", new PixelRect(140, 195, 20, 15));
+        yield return ("SZ", new PixelRect(160, 195, 20, 15));
+        yield return ("TC", new PixelRect(180, 195, 20, 15));
+        yield return ("TD", new PixelRect(200, 195, 20, 15));
+        yield return ("TF", new PixelRect(220, 195, 20, 15));
+        yield return ("TG", new PixelRect(240, 195, 20, 15));
+        yield return ("TH", new PixelRect(260, 195, 20, 15));
+        yield return ("TJ", new PixelRect(280, 195, 20, 15));
+        yield return ("TK", new PixelRect(300, 195, 20, 15));
+        yield return ("TL", new PixelRect(320, 195, 20, 15));
+        yield return ("TM", new PixelRect(0, 210, 20, 15));
+        yield return ("TN", new PixelRect(20, 210, 20, 15));
+        yield return ("TO", new PixelRect(40, 210, 20, 15));
+        yield return ("TR", new PixelRect(60, 210, 20, 15));
+        yield return ("TT", new PixelRect(80, 210, 20, 15));
+        yield return ("TV", new PixelRect(100, 210, 20, 15));
+        yield return ("TW", new PixelRect(120, 210, 20, 15));
+        yield return ("TZ", new PixelRect(140, 210, 20, 15));
+        yield return ("UA", new PixelRect(160, 210, 20, 15));
+        yield return ("UG", new PixelRect(180, 210, 20, 15));
+        yield return ("UM", new PixelRect(200, 210, 20, 15));
+        yield return ("UN", new PixelRect(220, 210, 20, 15));
+        yield return ("US", new PixelRect(240, 210, 20, 15));
+        yield return ("UY", new PixelRect(260, 210, 20, 15));
+        yield return ("UZ", new PixelRect(280, 210, 20, 15));
+        yield return ("VA", new PixelRect(300, 210, 20, 15));
+        yield return ("VC", new PixelRect(320, 210, 20, 15));
+        yield return ("VE", new PixelRect(0, 225, 20, 15));
+        yield return ("VG", new PixelRect(20, 225, 20, 15));
+        yield return ("VI", new PixelRect(40, 225, 20, 15));
+        yield return ("VN", new PixelRect(60, 225, 20, 15));
+        yield return ("VU", new PixelRect(80, 225, 20, 15));
+        yield return ("WF", new PixelRect(100, 225, 20, 15));
+        yield return ("WS", new PixelRect(120, 225, 20, 15));
+        yield return ("XK", new PixelRect(140, 225, 20, 15));
+        yield return ("XX", new PixelRect(160, 225, 20, 15));
+        yield return ("YE", new PixelRect(180, 225, 20, 15));
+        yield return ("YT", new PixelRect(200, 225, 20, 15));
+        yield return ("ZA", new PixelRect(220, 225, 20, 15));
+        yield return ("ZM", new PixelRect(240, 225, 20, 15));
+        yield return ("ZW", new PixelRect(260, 225, 20, 15));
     }
 }

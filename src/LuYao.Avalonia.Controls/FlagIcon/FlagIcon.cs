@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
@@ -34,20 +35,23 @@ public class FlagIcon
 
     static FlagIcon()
     {
-        var regularDict = new Dictionary<string, IImage>(StringComparer.OrdinalIgnoreCase);
-        var smallDict = new Dictionary<string, IImage>(StringComparer.OrdinalIgnoreCase);
-
         // Load regular sprite sheet
         using (var ms = AssetLoader.Open(new Uri("avares://LuYao.Avalonia.Controls/Assets/Images/flags-sprite.png")))
         {
             var bmp = new Bitmap(ms);
-            LoadFlags(bmp, regularDict, false);
+            var flags = FlagData.GetRegularFlags().ToList();
             
-            // Get XX flag as default
-            var xxRect = FlagData.GetRegularRect("XX");
-            if (xxRect.HasValue)
+            var regularDict = new Dictionary<string, IImage>(StringComparer.OrdinalIgnoreCase);
+            foreach (var (code, rect) in flags)
             {
-                DefaultRegularImage = new CroppedBitmap(bmp, xxRect.Value);
+                regularDict[code] = new CroppedBitmap(bmp, rect);
+            }
+            RegularCache = regularDict;
+            
+            // Set default XX flag
+            if (regularDict.TryGetValue("XX", out var defaultImg))
+            {
+                DefaultRegularImage = defaultImg;
             }
         }
 
@@ -55,66 +59,24 @@ public class FlagIcon
         using (var ms = AssetLoader.Open(new Uri("avares://LuYao.Avalonia.Controls/Assets/Images/flags-sprite-small.png")))
         {
             var bmp = new Bitmap(ms);
-            LoadFlags(bmp, smallDict, true);
+            var flags = FlagData.GetSmallFlags().ToList();
             
-            // Get XX flag as default
-            var xxRect = FlagData.GetSmallRect("XX");
-            if (xxRect.HasValue)
+            var smallDict = new Dictionary<string, IImage>(StringComparer.OrdinalIgnoreCase);
+            foreach (var (code, rect) in flags)
             {
-                DefaultSmallImage = new CroppedBitmap(bmp, xxRect.Value);
+                smallDict[code] = new CroppedBitmap(bmp, rect);
+            }
+            SmallCache = smallDict;
+            
+            // Set default XX flag
+            if (smallDict.TryGetValue("XX", out var defaultImg))
+            {
+                DefaultSmallImage = defaultImg;
             }
         }
-
-        RegularCache = regularDict;
-        SmallCache = smallDict;
 
         CodeProperty.Changed.AddClassHandler<Image>(OnCodeChanged);
         UseSmallProperty.Changed.AddClassHandler<Image>(OnUseSmallChanged);
-    }
-
-    private static void LoadFlags(Bitmap sprite, Dictionary<string, IImage> cache, bool isSmall)
-    {
-        // Get all flag codes and their rectangles from FlagData
-        // This is AOT-compatible as it doesn't use reflection
-        var testCodes = new[]
-        {
-            "AD", "AE", "AF", "AG", "AI", "AL", "AM", "AO", "AQ", "AR", "ARAB", "AS", "AT", "AU", "AW", "AX", "AZ",
-            "BA", "BB", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BL", "BM", "BN", "BO", "BQ", "BR", "BS", "BT", "BV", "BW", "BY", "BZ",
-            "CA", "CC", "CD", "CEFTA", "CF", "CG", "CH", "CI", "CK", "CL", "CM", "CN", "CO", "CP", "CR", "CU", "CV", "CW", "CX", "CY", "CZ",
-            "DE", "DG", "DJ", "DK", "DM", "DO", "DZ",
-            "EAC", "EC", "EE", "EG", "EH", "ER", "ES", "ES-CT", "ES-GA", "ES-PV", "ET", "EU",
-            "FI", "FJ", "FK", "FM", "FO", "FR",
-            "GA", "GB", "GB-ENG", "GB-NIR", "GB-SCT", "GB-WLS", "GD", "GE", "GF", "GG", "GH", "GI", "GL", "GM", "GN", "GP", "GQ", "GR", "GS", "GT", "GU", "GW", "GY",
-            "HK", "HM", "HN", "HR", "HT", "HU",
-            "IC", "ID", "IE", "IL", "IM", "IN", "IO", "IQ", "IR", "IS", "IT",
-            "JE", "JM", "JO", "JP",
-            "KE", "KG", "KH", "KI", "KM", "KN", "KP", "KR", "KW", "KY", "KZ",
-            "LA", "LB", "LC", "LI", "LK", "LR", "LS", "LT", "LU", "LV", "LY",
-            "MA", "MC", "MD", "ME", "MF", "MG", "MH", "MK", "ML", "MM", "MN", "MO", "MP", "MQ", "MR", "MS", "MT", "MU", "MV", "MW", "MX", "MY", "MZ",
-            "NA", "NC", "NE", "NF", "NG", "NI", "NL", "NO", "NP", "NR", "NU", "NZ",
-            "OM",
-            "PA", "PE", "PF", "PG", "PH", "PK", "PL", "PM", "PN", "PR", "PS", "PT", "PW", "PY",
-            "QA",
-            "RE", "RO", "RS", "RU", "RW",
-            "SA", "SB", "SC", "SD", "SE", "SG", "SH", "SH-AC", "SH-HL", "SH-TA", "SI", "SJ", "SK", "SL", "SM", "SN", "SO", "SR", "SS", "ST", "SV", "SX", "SY", "SZ",
-            "TC", "TD", "TF", "TG", "TH", "TJ", "TK", "TL", "TM", "TN", "TO", "TR", "TT", "TV", "TW", "TZ",
-            "UA", "UG", "UM", "UN", "US", "UY", "UZ",
-            "VA", "VC", "VE", "VG", "VI", "VN", "VU",
-            "WF", "WS",
-            "XK", "XX",
-            "YE", "YT",
-            "ZA", "ZM", "ZW"
-        };
-
-        foreach (var code in testCodes)
-        {
-            var rect = isSmall ? FlagData.GetSmallRect(code) : FlagData.GetRegularRect(code);
-            if (rect.HasValue)
-            {
-                var croppedBitmap = new CroppedBitmap(sprite, rect.Value);
-                cache[code] = croppedBitmap;
-            }
-        }
     }
 
     /// <summary>
