@@ -1,0 +1,265 @@
+<UserControl
+    x:Class="LuYao.Avalonia.Demo.Pages.FlagIconPage"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:luyao="https://www.coderbusy.com/luyao"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:LuYao.Avalonia.Demo.ViewModels"
+    d:DesignHeight="600"
+    d:DesignWidth="800"
+    x:DataType="vm:FlagIconViewModel"
+    mc:Ignorable="d">
+    <Design.DataContext>
+        <vm:FlagIconViewModel />
+    </Design.DataContext>
+
+    <ScrollViewer>
+        <StackPanel Margin="20" Spacing="20">
+            <TextBlock
+                FontSize="20"
+                FontWeight="Bold"
+                Text="FlagIcon Demo" />
+
+            <TextBlock
+                Foreground="Gray"
+                Text="A control for displaying country flag icons. Flags are loaded from embedded PNG assets using ISO country codes."
+                TextWrapping="Wrap" />
+
+            <Separator />
+
+            <!--  Interactive Demo  -->
+            <TextBlock
+                FontSize="16"
+                FontWeight="SemiBold"
+                Text="Interactive Demo" />
+
+            <Border
+                Padding="20"
+                Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                BorderThickness="1"
+                CornerRadius="4">
+                <StackPanel Spacing="15">
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Text="Country Code:" />
+                    <ComboBox
+                        MinWidth="150"
+                        ItemsSource="{Binding PopularCountryCodes}"
+                        SelectedItem="{Binding SelectedCode}" />
+
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Text="Flag Width:" />
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Slider
+                            MinWidth="200"
+                            Maximum="200"
+                            Minimum="20"
+                            Value="{Binding FlagWidth}" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Text="{Binding FlagWidth, StringFormat='{}{0:F0} px'}" />
+                    </StackPanel>
+
+                    <Separator Margin="0,10" />
+
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Text="Result:" />
+                    <Border
+                        Padding="20"
+                        Background="White"
+                        BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                        BorderThickness="1"
+                        CornerRadius="4">
+                        <Image
+                            luyao:FlagIcon.Code="{Binding SelectedCode}"
+                            Width="{Binding FlagWidth}"
+                            HorizontalAlignment="Center" />
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <Separator />
+
+            <!--  Examples  -->
+            <TextBlock
+                FontSize="16"
+                FontWeight="SemiBold"
+                Text="Examples" />
+
+            <Border
+                Padding="20"
+                Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                BorderThickness="1"
+                CornerRadius="4">
+                <StackPanel Spacing="15">
+                    <StackPanel Spacing="5">
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Text="Standard Size (100x75):" />
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Image luyao:FlagIcon.Code="CN" Width="100" />
+                            <Image luyao:FlagIcon.Code="US" Width="100" />
+                            <Image luyao:FlagIcon.Code="GB" Width="100" />
+                            <Image luyao:FlagIcon.Code="JP" Width="100" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Spacing="5">
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Text="Small Flags (20x15):" />
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <Image luyao:FlagIcon.Code="CN" Width="20" Height="15" />
+                            <Image luyao:FlagIcon.Code="US" Width="20" Height="15" />
+                            <Image luyao:FlagIcon.Code="GB" Width="20" Height="15" />
+                            <Image luyao:FlagIcon.Code="JP" Width="20" Height="15" />
+                            <Image luyao:FlagIcon.Code="FR" Width="20" Height="15" />
+                            <Image luyao:FlagIcon.Code="DE" Width="20" Height="15" />
+                            <Image luyao:FlagIcon.Code="IT" Width="20" Height="15" />
+                            <Image luyao:FlagIcon.Code="ES" Width="20" Height="15" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Spacing="5">
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Text="Large Flags (150x112):" />
+                        <StackPanel Orientation="Horizontal" Spacing="15">
+                            <Image luyao:FlagIcon.Code="FR" Width="150" />
+                            <Image luyao:FlagIcon.Code="DE" Width="150" />
+                            <Image luyao:FlagIcon.Code="IT" Width="150" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Spacing="5">
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Text="Mixed Sizes:" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                            <Image luyao:FlagIcon.Code="CA" Width="50" />
+                            <Image luyao:FlagIcon.Code="AU" Width="40" />
+                            <Image luyao:FlagIcon.Code="IN" Width="30" />
+                            <Image luyao:FlagIcon.Code="BR" Width="22" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Spacing="5">
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Text="More Country Examples:" />
+                        <WrapPanel>
+                            <StackPanel Margin="5" Spacing="3">
+                                <Image luyao:FlagIcon.Code="AR" Width="60" />
+                                <TextBlock HorizontalAlignment="Center" FontSize="10" Text="Argentina" />
+                            </StackPanel>
+                            <StackPanel Margin="5" Spacing="3">
+                                <Image luyao:FlagIcon.Code="ZA" Width="60" />
+                                <TextBlock HorizontalAlignment="Center" FontSize="10" Text="South Africa" />
+                            </StackPanel>
+                            <StackPanel Margin="5" Spacing="3">
+                                <Image luyao:FlagIcon.Code="NL" Width="60" />
+                                <TextBlock HorizontalAlignment="Center" FontSize="10" Text="Netherlands" />
+                            </StackPanel>
+                            <StackPanel Margin="5" Spacing="3">
+                                <Image luyao:FlagIcon.Code="SE" Width="60" />
+                                <TextBlock HorizontalAlignment="Center" FontSize="10" Text="Sweden" />
+                            </StackPanel>
+                            <StackPanel Margin="5" Spacing="3">
+                                <Image luyao:FlagIcon.Code="CH" Width="60" />
+                                <TextBlock HorizontalAlignment="Center" FontSize="10" Text="Switzerland" />
+                            </StackPanel>
+                            <StackPanel Margin="5" Spacing="3">
+                                <Image luyao:FlagIcon.Code="KR" Width="60" />
+                                <TextBlock HorizontalAlignment="Center" FontSize="10" Text="South Korea" />
+                            </StackPanel>
+                            <StackPanel Margin="5" Spacing="3">
+                                <Image luyao:FlagIcon.Code="MX" Width="60" />
+                                <TextBlock HorizontalAlignment="Center" FontSize="10" Text="Mexico" />
+                            </StackPanel>
+                            <StackPanel Margin="5" Spacing="3">
+                                <Image luyao:FlagIcon.Code="RU" Width="60" />
+                                <TextBlock HorizontalAlignment="Center" FontSize="10" Text="Russia" />
+                            </StackPanel>
+                        </WrapPanel>
+                    </StackPanel>
+
+                    <StackPanel Spacing="5">
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Text="Fallback to XX for Invalid/Unknown Codes:" />
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <StackPanel Spacing="3">
+                                <Image luyao:FlagIcon.Code="INVALID" Width="50" />
+                                <TextBlock HorizontalAlignment="Center" FontSize="10" Text="INVALID" />
+                            </StackPanel>
+                            <StackPanel Spacing="3">
+                                <Image luyao:FlagIcon.Code="ZZZ" Width="50" />
+                                <TextBlock HorizontalAlignment="Center" FontSize="10" Text="ZZZ" />
+                            </StackPanel>
+                            <StackPanel Spacing="3">
+                                <Image luyao:FlagIcon.Code="" Width="50" />
+                                <TextBlock HorizontalAlignment="Center" FontSize="10" Text="(empty)" />
+                            </StackPanel>
+                        </StackPanel>
+                        <TextBlock
+                            FontSize="11"
+                            Foreground="Gray"
+                            Text="When an invalid or unknown country code is provided, the default 'XX' flag is displayed."
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Separator />
+
+            <!--  Usage Info  -->
+            <TextBlock
+                FontSize="16"
+                FontWeight="SemiBold"
+                Text="Usage" />
+
+            <Border
+                Padding="20"
+                Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                BorderThickness="1"
+                CornerRadius="4">
+                <StackPanel Spacing="10">
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Text="Basic Usage:" />
+                    <Border
+                        Padding="10"
+                        Background="#F5F5F5"
+                        BorderBrush="#E0E0E0"
+                        BorderThickness="1"
+                        CornerRadius="3">
+                        <TextBlock
+                            FontFamily="Consolas,Menlo,Monaco,monospace"
+                            FontSize="12"
+                            Text="&lt;Image luyao:FlagIcon.Code=&quot;CN&quot; Width=&quot;100&quot; /&gt;"
+                            TextWrapping="Wrap" />
+                    </Border>
+
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Margin="0,10,0,0"
+                        Text="Key Points:" />
+                    <StackPanel Spacing="5">
+                        <TextBlock Text="• Use ISO 3166-1 alpha-2 country codes (e.g., CN, US, GB, JP)" />
+                        <TextBlock Text="• Codes are case-insensitive (CN and cn both work)" />
+                        <TextBlock Text="• Aspect ratio is 4:3 (recommended to set width only)" />
+                        <TextBlock Text="• Over 200 country and territory flags are included" />
+                        <TextBlock Text="• Invalid codes fallback to the 'XX' (unknown) flag" />
+                        <TextBlock Text="• Flags are loaded from embedded PNG assets" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -52,6 +52,9 @@
             </TabItem>
             <TabItem Header="Controls">
                 <TabControl TabStripPlacement="Top">
+                    <TabItem Header="FlagIcon">
+                        <pages:FlagIconPage />
+                    </TabItem>
                     <TabItem Header="LightTextBlock">
                         <pages:LightTextBlockPage />
                     </TabItem>
