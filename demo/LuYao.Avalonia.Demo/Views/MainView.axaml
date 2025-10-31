@@ -26,8 +26,8 @@
                     VerticalAlignment="Center"
                     Text="{Binding Greeting}" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <ly:FlagIcon Code="CN" />
-                    <ly:FlagIcon Code="US" />
+                    <Image ly:FlagIcon.Code="CN" Width="22" />
+                    <Image ly:FlagIcon.Code="US" Width="22" />
                 </StackPanel>
             </StackPanel>
         </TabItem>
