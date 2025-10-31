@@ -67,20 +67,11 @@ public class LightTextBlock : Control
 
     private FormattedText GetFormattedText()
     {
-        if (string.IsNullOrEmpty(Text))
-            return new FormattedText(
-                string.Empty,
-                CultureInfo.CurrentUICulture,
-                FlowDirection.LeftToRight,
-                Typeface.Default,
-                FontSize,
-                Brushes.Black);
-
         var typeface = new Typeface(FontFamily ?? Typeface.Default.FontFamily);
         var foreground = Foreground ?? Brushes.Black;
 
         return new FormattedText(
-            Text,
+            Text ?? string.Empty,
             CultureInfo.CurrentUICulture,
             FlowDirection.LeftToRight,
             typeface,
