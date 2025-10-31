@@ -53,7 +53,7 @@
             <TabItem Header="Panels">
                 <TabControl TabStripPlacement="Top">
                     <TabItem Header="VirtualizingWrapPanel">
-                        <pages:VirtualizingWrapPanelPage DataContext="{Binding VirtualizingWrapPanelViewModel}" />
+                        <pages:VirtualizingWrapPanelPage />
                     </TabItem>
                 </TabControl>
             </TabItem>
