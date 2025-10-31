@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
@@ -11,15 +9,12 @@ namespace LuYao.Avalonia.Controls;
 
 /// <summary>
 /// Provides attached properties for displaying flag icons on Image controls.
-/// Flag icons are loaded from sprite sheets for efficient memory usage.
+/// Flag icons are loaded from individual PNG files.
 /// AOT-compatible implementation without reflection.
 /// </summary>
 public class FlagIcon
 {
-    private static readonly IReadOnlyDictionary<string, IImage> RegularCache;
-    private static readonly IReadOnlyDictionary<string, IImage> SmallCache;
-    private static readonly IImage? DefaultRegularImage;
-    private static readonly IImage? DefaultSmallImage;
+    private static readonly Uri DefaultUri = new("avares://LuYao.Avalonia.Controls/FlagIcon/Assets/xx.png");
 
     /// <summary>
     /// Attached property for setting the flag code (string)
@@ -28,53 +23,14 @@ public class FlagIcon
         AvaloniaProperty.RegisterAttached<FlagIcon, Image, string>("Code", defaultValue: string.Empty);
 
     /// <summary>
-    /// Attached property for using small flag icons (20x15 instead of 100x75)
+    /// Attached property for using small flag icons (thumbnails)
+    /// When true, images are scaled down for better performance
     /// </summary>
     public static readonly AttachedProperty<bool> UseSmallProperty =
         AvaloniaProperty.RegisterAttached<FlagIcon, Image, bool>("UseSmall", defaultValue: false);
 
     static FlagIcon()
     {
-        // Load regular sprite sheet
-        using (var ms = AssetLoader.Open(new Uri("avares://LuYao.Avalonia.Controls/Assets/Images/flags-sprite.png")))
-        {
-            var bmp = new Bitmap(ms);
-            var flags = FlagData.GetRegularFlags().ToList();
-            
-            var regularDict = new Dictionary<string, IImage>(StringComparer.OrdinalIgnoreCase);
-            foreach (var (code, rect) in flags)
-            {
-                regularDict[code] = new CroppedBitmap(bmp, rect);
-            }
-            RegularCache = regularDict;
-            
-            // Set default XX flag
-            if (regularDict.TryGetValue("XX", out var defaultImg))
-            {
-                DefaultRegularImage = defaultImg;
-            }
-        }
-
-        // Load small sprite sheet
-        using (var ms = AssetLoader.Open(new Uri("avares://LuYao.Avalonia.Controls/Assets/Images/flags-sprite-small.png")))
-        {
-            var bmp = new Bitmap(ms);
-            var flags = FlagData.GetSmallFlags().ToList();
-            
-            var smallDict = new Dictionary<string, IImage>(StringComparer.OrdinalIgnoreCase);
-            foreach (var (code, rect) in flags)
-            {
-                smallDict[code] = new CroppedBitmap(bmp, rect);
-            }
-            SmallCache = smallDict;
-            
-            // Set default XX flag
-            if (smallDict.TryGetValue("XX", out var defaultImg))
-            {
-                DefaultSmallImage = defaultImg;
-            }
-        }
-
         CodeProperty.Changed.AddClassHandler<Image>(OnCodeChanged);
         UseSmallProperty.Changed.AddClassHandler<Image>(OnUseSmallChanged);
     }
@@ -127,24 +83,54 @@ public class FlagIcon
         }
     }
 
+    private static string FormatUri(string code) =>
+        $"avares://LuYao.Avalonia.Controls/FlagIcon/Assets/{code.ToLowerInvariant()}.png";
+
     private static void UpdateImage(Image image, string code, bool useSmall)
     {
         if (string.IsNullOrWhiteSpace(code))
         {
             // Use default XX flag if no code is provided
-            image.Source = useSmall ? DefaultSmallImage : DefaultRegularImage;
+            LoadImage(image, DefaultUri, useSmall);
             return;
         }
 
-        var cache = useSmall ? SmallCache : RegularCache;
-        if (cache.TryGetValue(code, out var img))
-        {
-            image.Source = img;
-        }
-        else
+        var uri = new Uri(FormatUri(code));
+        if (!AssetLoader.Exists(uri))
         {
             // If code not found, show XX flag
-            image.Source = useSmall ? DefaultSmallImage : DefaultRegularImage;
+            uri = DefaultUri;
+        }
+
+        LoadImage(image, uri, useSmall);
+    }
+
+    private static void LoadImage(Image image, Uri uri, bool useSmall)
+    {
+        try
+        {
+            var scaling = TopLevel.GetTopLevel(image)?.RenderScaling ?? 1.0;
+            
+            using var stream = AssetLoader.Open(uri);
+            
+            if (useSmall)
+            {
+                // For small/thumbnail mode, decode to a smaller size
+                // Default small size is 20x15 (scaled based on display DPI)
+                var targetWidth = (int)(20 * scaling);
+                image.Source = Bitmap.DecodeToWidth(stream, targetWidth);
+            }
+            else
+            {
+                // For regular mode, use the full size image with DPI scaling
+                var targetWidth = (int)(100 * scaling);
+                image.Source = Bitmap.DecodeToWidth(stream, targetWidth);
+            }
+        }
+        catch
+        {
+            // If loading fails, clear the source
+            image.Source = null;
         }
     }
 }
