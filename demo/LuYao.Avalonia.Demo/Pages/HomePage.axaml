@@ -1,0 +1,60 @@
+<UserControl
+    x:Class="LuYao.Avalonia.Demo.Pages.HomePage"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:luyao="https://www.coderbusy.com/luyao"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <ScrollViewer>
+        <StackPanel Margin="20" Spacing="20">
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="24"
+                FontWeight="Bold"
+                Text="Welcome to LuYao Avalonia Controls" />
+            
+            <TextBlock
+                HorizontalAlignment="Center"
+                Text="A collection of useful controls for Avalonia UI" />
+            
+            <TextBlock Text="Regular Flags (100x75):" FontWeight="Bold" Margin="0,20,0,0" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                <Image luyao:FlagIcon.Code="CN" Width="100" />
+                <Image luyao:FlagIcon.Code="US" Width="100" />
+                <Image luyao:FlagIcon.Code="GB" Width="100" />
+                <Image luyao:FlagIcon.Code="JP" Width="100" />
+            </StackPanel>
+            
+            <TextBlock Text="Small Flags (20x15):" FontWeight="Bold" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
+                <Image luyao:FlagIcon.Code="CN" luyao:FlagIcon.UseSmall="True" Width="20" />
+                <Image luyao:FlagIcon.Code="US" luyao:FlagIcon.UseSmall="True" Width="20" />
+                <Image luyao:FlagIcon.Code="GB" luyao:FlagIcon.UseSmall="True" Width="20" />
+                <Image luyao:FlagIcon.Code="JP" luyao:FlagIcon.UseSmall="True" Width="20" />
+                <Image luyao:FlagIcon.Code="FR" luyao:FlagIcon.UseSmall="True" Width="20" />
+                <Image luyao:FlagIcon.Code="DE" luyao:FlagIcon.UseSmall="True" Width="20" />
+                <Image luyao:FlagIcon.Code="IT" luyao:FlagIcon.UseSmall="True" Width="20" />
+                <Image luyao:FlagIcon.Code="ES" luyao:FlagIcon.UseSmall="True" Width="20" />
+            </StackPanel>
+            
+            <TextBlock Text="Mixed Sizes:" FontWeight="Bold" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                <Image luyao:FlagIcon.Code="CA" Width="50" />
+                <Image luyao:FlagIcon.Code="AU" Width="40" />
+                <Image luyao:FlagIcon.Code="IN" Width="30" />
+                <Image luyao:FlagIcon.Code="BR" Width="22" />
+            </StackPanel>
+            
+            <TextBlock Text="Fallback to XX for unknown codes:" FontWeight="Bold" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                <Image luyao:FlagIcon.Code="INVALID" Width="50" />
+                <Image luyao:FlagIcon.Code="ZZZ" Width="50" />
+                <Image luyao:FlagIcon.Code="" Width="50" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

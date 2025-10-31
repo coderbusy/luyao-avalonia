@@ -3,10 +3,9 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:luyao="https://www.coderbusy.com/luyao"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pages="clr-namespace:LuYao.Avalonia.Demo.Pages"
     xmlns:vm="clr-namespace:LuYao.Avalonia.Demo.ViewModels"
-    xmlns:views="clr-namespace:LuYao.Avalonia.Demo.Views"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:DataType="vm:MainViewModel"
@@ -18,52 +17,46 @@
         -->
         <vm:MainViewModel />
     </Design.DataContext>
-    <TabControl>
-        <TabItem Header="Home">
-            <StackPanel Margin="20" Spacing="20">
+    <Grid RowDefinitions="Auto,*">
+        <Border
+            Grid.Row="0"
+            Margin="8"
+            Padding="12,8"
+            Background="{DynamicResource SystemAccentColor}"
+            CornerRadius="4">
+            <StackPanel Orientation="Horizontal" Spacing="8">
                 <TextBlock
-                    HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Text="{Binding Greeting}" />
-                
-                <TextBlock Text="Regular Flags (100x75):" FontWeight="Bold" />
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
-                    <Image luyao:FlagIcon.Code="CN" Width="100" />
-                    <Image luyao:FlagIcon.Code="US" Width="100" />
-                    <Image luyao:FlagIcon.Code="GB" Width="100" />
-                    <Image luyao:FlagIcon.Code="JP" Width="100" />
-                </StackPanel>
-                
-                <TextBlock Text="Small Flags (20x15):" FontWeight="Bold" />
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
-                    <Image luyao:FlagIcon.Code="CN" luyao:FlagIcon.UseSmall="True" Width="20" />
-                    <Image luyao:FlagIcon.Code="US" luyao:FlagIcon.UseSmall="True" Width="20" />
-                    <Image luyao:FlagIcon.Code="GB" luyao:FlagIcon.UseSmall="True" Width="20" />
-                    <Image luyao:FlagIcon.Code="JP" luyao:FlagIcon.UseSmall="True" Width="20" />
-                    <Image luyao:FlagIcon.Code="FR" luyao:FlagIcon.UseSmall="True" Width="20" />
-                    <Image luyao:FlagIcon.Code="DE" luyao:FlagIcon.UseSmall="True" Width="20" />
-                    <Image luyao:FlagIcon.Code="IT" luyao:FlagIcon.UseSmall="True" Width="20" />
-                    <Image luyao:FlagIcon.Code="ES" luyao:FlagIcon.UseSmall="True" Width="20" />
-                </StackPanel>
-                
-                <TextBlock Text="Mixed Sizes:" FontWeight="Bold" />
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
-                    <Image luyao:FlagIcon.Code="CA" Width="50" />
-                    <Image luyao:FlagIcon.Code="AU" Width="40" />
-                    <Image luyao:FlagIcon.Code="IN" Width="30" />
-                    <Image luyao:FlagIcon.Code="BR" Width="22" />
-                </StackPanel>
-                
-                <TextBlock Text="Fallback to XX for unknown codes:" FontWeight="Bold" />
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
-                    <Image luyao:FlagIcon.Code="INVALID" Width="50" />
-                    <Image luyao:FlagIcon.Code="ZZZ" Width="50" />
-                    <Image luyao:FlagIcon.Code="" Width="50" />
-                </StackPanel>
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="LuYao Avalonia Controls" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Foreground="White"
+                    Text="/" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Foreground="White"
+                    Opacity="0.8"
+                    Text="{ReflectionBinding #DemoTabs.SelectedItem.Header}" />
             </StackPanel>
-        </TabItem>
-        <TabItem Header="VirtualizingWrapPanel">
-            <views:VirtualizingWrapPanelView />
-        </TabItem>
-    </TabControl>
+        </Border>
+        <TabControl
+            Name="DemoTabs"
+            Grid.Row="1"
+            Margin="8"
+            TabStripPlacement="Left">
+            <TabItem Header="Home">
+                <pages:HomePage />
+            </TabItem>
+            <TabItem Header="Panels">
+                <TabControl TabStripPlacement="Top">
+                    <TabItem Header="VirtualizingWrapPanel">
+                        <pages:VirtualizingWrapPanelPage />
+                    </TabItem>
+                </TabControl>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </UserControl>
