@@ -81,6 +81,14 @@ public class VirtualizingWrapPanel : VirtualizingPanel
     private Rect _viewport;
     private Rect _extendedViewport;
     private bool _isWaitingForViewportUpdate;
+    
+    // Element recycling pool
+    private Dictionary<object, Stack<Control>>? _recyclePool;
+    
+    private static readonly AttachedProperty<object?> RecycleKeyProperty =
+        AvaloniaProperty.RegisterAttached<VirtualizingWrapPanel, Control, object?>("RecycleKey");
+    
+    private static readonly object s_itemIsItsOwnContainer = new object();
 
     private class LayoutInfo
     {
@@ -212,8 +220,8 @@ public class VirtualizingWrapPanel : VirtualizingPanel
             targetIndexes.Add(i);
         }
 
-        // Remove containers that are no longer in the visible range
-        var childrenToRemove = new List<Control>();
+        // Recycle containers that are no longer in the visible range
+        var childrenToRecycle = new List<(Control control, int index)>();
         foreach (var child in Children)
         {
             if (child is Control control)
@@ -221,14 +229,14 @@ public class VirtualizingWrapPanel : VirtualizingPanel
                 var index = GetItemIndex(control.DataContext);
                 if (index < 0 || !targetIndexes.Contains(index))
                 {
-                    childrenToRemove.Add(control);
+                    childrenToRecycle.Add((control, index));
                 }
             }
         }
 
-        foreach (var child in childrenToRemove)
+        foreach (var (control, index) in childrenToRecycle)
         {
-            RemoveInternalChild(child);
+            RecycleElement(control, index);
         }
 
         // Realize elements in the visible range
@@ -267,33 +275,120 @@ public class VirtualizingWrapPanel : VirtualizingPanel
         if (generator == null)
             return null;
 
-        // Check if container already exists
+        // Check if container already exists in children
         foreach (var child in Children)
         {
             if (child is Control control && control.DataContext == item)
                 return control;
         }
 
-        // Create new container
+        // Try to get or create container
         if (generator.NeedsContainer(item, index, out var recycleKey))
         {
-            var container = generator.CreateContainer(item, index, recycleKey);
-            generator.PrepareItemContainer(container, item, index);
-            AddInternalChild(container);
-            generator.ItemContainerPrepared(container, item, index);
-            return container;
+            // Try to get from recycle pool first
+            var recycled = GetRecycledElement(item, index, recycleKey);
+            if (recycled != null)
+                return recycled;
+            
+            // Create new container
+            return CreateElement(item, index, recycleKey);
         }
         else
         {
             // Item is its own container
-            if (item is Control itemControl)
-            {
-                AddInternalChild(itemControl);
-                return itemControl;
-            }
+            return GetItemAsOwnContainer(item, index);
+        }
+    }
+    
+    private Control? GetRecycledElement(object? item, int index, object? recycleKey)
+    {
+        if (recycleKey == null || ItemContainerGenerator == null)
+            return null;
+
+        var generator = ItemContainerGenerator;
+
+        if (_recyclePool?.TryGetValue(recycleKey, out var recyclePool) == true && recyclePool.Count > 0)
+        {
+            var recycled = recyclePool.Pop();
+            recycled.SetCurrentValue(Visual.IsVisibleProperty, true);
+            generator.PrepareItemContainer(recycled, item, index);
+            generator.ItemContainerPrepared(recycled, item, index);
+            return recycled;
         }
 
         return null;
+    }
+    
+    private Control CreateElement(object? item, int index, object? recycleKey)
+    {
+        if (ItemContainerGenerator == null)
+            throw new InvalidOperationException("ItemContainerGenerator is null");
+
+        var generator = ItemContainerGenerator;
+        var container = generator.CreateContainer(item, index, recycleKey);
+
+        container.SetValue(RecycleKeyProperty, recycleKey);
+        generator.PrepareItemContainer(container, item, index);
+        AddInternalChild(container);
+        generator.ItemContainerPrepared(container, item, index);
+
+        return container;
+    }
+    
+    private Control GetItemAsOwnContainer(object? item, int index)
+    {
+        if (item is not Control itemControl)
+            throw new InvalidOperationException("Item must be a Control when it's its own container");
+
+        itemControl.SetValue(RecycleKeyProperty, s_itemIsItsOwnContainer);
+        
+        if (ItemContainerGenerator != null)
+        {
+            ItemContainerGenerator.PrepareItemContainer(itemControl, item, index);
+            ItemContainerGenerator.ItemContainerPrepared(itemControl, item, index);
+        }
+        
+        AddInternalChild(itemControl);
+        return itemControl;
+    }
+    
+    private void RecycleElement(Control element, int index)
+    {
+        if (ItemContainerGenerator == null)
+            return;
+
+        var recycleKey = element.GetValue(RecycleKeyProperty);
+
+        if (recycleKey == null)
+        {
+            // No recycle key, just remove it
+            RemoveInternalChild(element);
+        }
+        else if (recycleKey == s_itemIsItsOwnContainer)
+        {
+            // Item is its own container, just hide it
+            element.SetCurrentValue(Visual.IsVisibleProperty, false);
+        }
+        else
+        {
+            // Recycle the element
+            ItemContainerGenerator.ClearItemContainer(element);
+            PushToRecyclePool(recycleKey, element);
+            element.SetCurrentValue(Visual.IsVisibleProperty, false);
+        }
+    }
+    
+    private void PushToRecyclePool(object recycleKey, Control element)
+    {
+        _recyclePool ??= new Dictionary<object, Stack<Control>>();
+
+        if (!_recyclePool.TryGetValue(recycleKey, out var pool))
+        {
+            pool = new Stack<Control>();
+            _recyclePool.Add(recycleKey, pool);
+        }
+
+        pool.Push(element);
     }
 
     protected override Size ArrangeOverride(Size finalSize)

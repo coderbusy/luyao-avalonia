@@ -126,9 +126,18 @@ public class ItemViewModel
 ## Performance Considerations
 
 - **Virtualization**: The panel only creates visual elements for items in the visible viewport plus a buffer zone
-- **Large Datasets**: Designed to handle thousands of items efficiently through virtualization
+- **Element Recycling**: Implements an efficient recycling pool that reuses container elements when scrolling, significantly reducing GC pressure
+- **Large Datasets**: Designed to handle thousands of items efficiently through virtualization and recycling
 - **Memory Usage**: Significantly reduces memory consumption compared to non-virtualizing panels
-- **Scroll Performance**: Automatically updates displayed items during scrolling
+- **Scroll Performance**: Automatically updates displayed items during scrolling with minimal overhead
+
+### Recycling Pool Benefits
+
+The element recycling pool provides:
+- **Reduced Allocations**: Containers are reused instead of created/destroyed on every scroll
+- **Better Performance**: Less GC pressure leads to smoother scrolling
+- **Memory Efficiency**: Maintains only the containers needed for visible items plus buffer
+- **Automatic Management**: Recycling is handled transparently by the panel
 
 ## API Compatibility
 
@@ -136,10 +145,10 @@ This implementation follows the API design of the WPF VirtualizingWrapPanel for 
 - `ItemSize` instead of separate `ItemWidth`/`ItemHeight`
 - `Orientation` property for direction control
 - Standard wrap panel behavior without custom break line logic
+- Element recycling pool matching Avalonia's VirtualizingStackPanel pattern
 
 ## Future Enhancements
 
-- Element recycling pool for maximum performance
 - Support for variable item sizes via `ItemSizeProvider`
 - `SpacingMode` and `ItemAlignment` properties
 - Grid layout mode option
@@ -149,9 +158,9 @@ This implementation follows the API design of the WPF VirtualizingWrapPanel for 
 ## Demo
 
 Run the demo application included in the solution to see the VirtualizingWrapPanel in action. The demo includes:
-- 100 sample items
-- Break line items every 10th item
+- 10,000 sample items to demonstrate virtualization performance
 - Interactive demonstration of the layout behavior
+- Item count display showing total items vs rendered items
 
 ## Contributing
 
