@@ -1,0 +1,178 @@
+<UserControl
+    x:Class="LuYao.Avalonia.Demo.Pages.LightTextBlockPage"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:luyao="https://www.coderbusy.com/luyao"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:LuYao.Avalonia.Demo.ViewModels"
+    d:DesignHeight="600"
+    d:DesignWidth="800"
+    x:DataType="vm:LightTextBlockViewModel"
+    mc:Ignorable="d">
+    <Design.DataContext>
+        <vm:LightTextBlockViewModel />
+    </Design.DataContext>
+
+    <ScrollViewer>
+        <StackPanel Margin="20" Spacing="20">
+            <TextBlock
+                FontSize="20"
+                FontWeight="Bold"
+                Text="LightTextBlock Demo" />
+
+            <TextBlock
+                Foreground="Gray"
+                Text="A lightweight control for displaying text with limited properties. Does not support advanced features like soft wrapping."
+                TextWrapping="Wrap" />
+
+            <Separator />
+
+            <!--  Interactive Demo  -->
+            <TextBlock
+                FontSize="16"
+                FontWeight="SemiBold"
+                Text="Interactive Demo" />
+
+            <Border
+                Padding="20"
+                Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                BorderThickness="1"
+                CornerRadius="4">
+                <StackPanel Spacing="15">
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Text="Text:" />
+                    <TextBox
+                        MinWidth="300"
+                        Text="{Binding SampleText}" />
+
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Text="Font Size:" />
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Slider
+                            MinWidth="200"
+                            Maximum="72"
+                            Minimum="8"
+                            Value="{Binding FontSize}" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Text="{Binding FontSize, StringFormat='{}{0:F0} pt'}" />
+                    </StackPanel>
+
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Text="Color:" />
+                    <ComboBox
+                        MinWidth="150"
+                        ItemsSource="{Binding AvailableColors}"
+                        SelectedItem="{Binding SelectedColor}" />
+
+                    <Separator Margin="0,10" />
+
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Text="Result:" />
+                    <Border
+                        Padding="20"
+                        Background="White"
+                        BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                        BorderThickness="1"
+                        CornerRadius="4">
+                        <luyao:LightTextBlock
+                            FontSize="{Binding FontSize}"
+                            Foreground="{Binding SelectedColor}"
+                            Text="{Binding SampleText}" />
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <Separator />
+
+            <!--  Examples  -->
+            <TextBlock
+                FontSize="16"
+                FontWeight="SemiBold"
+                Text="Examples" />
+
+            <Border
+                Padding="20"
+                Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                BorderThickness="1"
+                CornerRadius="4">
+                <StackPanel Spacing="15">
+                    <StackPanel Spacing="5">
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Text="Default:" />
+                        <luyao:LightTextBlock Text="Default LightTextBlock" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="5">
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Text="Custom Font Size (32pt):" />
+                        <luyao:LightTextBlock FontSize="32" Text="Large Text" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="5">
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Text="Colored Text:" />
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <luyao:LightTextBlock
+                                FontSize="16"
+                                Foreground="Red"
+                                Text="Red" />
+                            <luyao:LightTextBlock
+                                FontSize="16"
+                                Foreground="Blue"
+                                Text="Blue" />
+                            <luyao:LightTextBlock
+                                FontSize="16"
+                                Foreground="Green"
+                                Text="Green" />
+                            <luyao:LightTextBlock
+                                FontSize="16"
+                                Foreground="Purple"
+                                Text="Purple" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Spacing="5">
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Text="Different Font Sizes:" />
+                        <StackPanel Spacing="5">
+                            <luyao:LightTextBlock FontSize="10" Text="Size 10pt" />
+                            <luyao:LightTextBlock FontSize="14" Text="Size 14pt" />
+                            <luyao:LightTextBlock FontSize="18" Text="Size 18pt" />
+                            <luyao:LightTextBlock FontSize="24" Text="Size 24pt" />
+                            <luyao:LightTextBlock FontSize="32" Text="Size 32pt" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Spacing="5">
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Text="Empty Text:" />
+                        <Border
+                            Height="30"
+                            Background="LightGray"
+                            BorderBrush="Gray"
+                            BorderThickness="1">
+                            <luyao:LightTextBlock Text="" />
+                        </Border>
+                        <TextBlock
+                            FontSize="11"
+                            Foreground="Gray"
+                            Text="(Empty text renders as zero size)" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
