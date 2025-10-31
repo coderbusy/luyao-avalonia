@@ -50,6 +50,13 @@
             <TabItem Header="Home">
                 <pages:HomePage />
             </TabItem>
+            <TabItem Header="Controls">
+                <TabControl TabStripPlacement="Top">
+                    <TabItem Header="LightTextBlock">
+                        <pages:LightTextBlockPage />
+                    </TabItem>
+                </TabControl>
+            </TabItem>
             <TabItem Header="Panels">
                 <TabControl TabStripPlacement="Top">
                     <TabItem Header="VirtualizingWrapPanel">
