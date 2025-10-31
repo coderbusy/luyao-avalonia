@@ -23,6 +23,7 @@
     <ProjectReference Include="..\..\src\LuYao.Avalonia.Behaviors\LuYao.Avalonia.Behaviors.csproj" />
     <ProjectReference Include="..\..\src\LuYao.Avalonia.Controls.FlagIcon\LuYao.Avalonia.Controls.FlagIcon.csproj" />
     <ProjectReference Include="..\..\src\LuYao.Avalonia.Fonts.MiSans.Regular\LuYao.Avalonia.Fonts.MiSans.Regular.csproj" />
+    <ProjectReference Include="..\..\src\LuYao.Avalonia.Controls\LuYao.Avalonia.Controls.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,6 +6,7 @@
     xmlns:ly="https://www.coderbusy.com/luyao"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:LuYao.Avalonia.Demo.ViewModels"
+    xmlns:views="clr-namespace:LuYao.Avalonia.Demo.Views"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:DataType="vm:MainViewModel"
@@ -17,14 +18,21 @@
         -->
         <vm:MainViewModel />
     </Design.DataContext>
-    <StackPanel>
-        <TextBlock
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Text="{Binding Greeting}" />
-        <StackPanel Orientation="Horizontal">
-            <ly:FlagIcon Code="CN" />
-            <ly:FlagIcon Code="US" />
-        </StackPanel>
-    </StackPanel>
+    <TabControl>
+        <TabItem Header="Home">
+            <StackPanel>
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Text="{Binding Greeting}" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <ly:FlagIcon Code="CN" />
+                    <ly:FlagIcon Code="US" />
+                </StackPanel>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="VirtualizingWrapPanel">
+            <views:VirtualizingWrapPanelView />
+        </TabItem>
+    </TabControl>
 </UserControl>
