@@ -1,0 +1,48 @@
+<UserControl
+    x:Class="LuYao.Avalonia.Demo.Pages.VirtualizingWrapPanelPage"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:luyao="https://www.coderbusy.com/luyao"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:LuYao.Avalonia.Demo.ViewModels"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vm:VirtualizingWrapPanelViewModel"
+    mc:Ignorable="d">
+    <Design.DataContext>
+        <vm:VirtualizingWrapPanelViewModel />
+    </Design.DataContext>
+    <Grid RowDefinitions="Auto,*">
+        <StackPanel Grid.Row="0" Margin="10" Spacing="10">
+            <TextBlock Text="VirtualizingWrapPanel Demo" FontSize="20" FontWeight="Bold" />
+            <TextBlock Text="This panel virtualizes items for better performance with large collections." TextWrapping="Wrap" />
+        </StackPanel>
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl ItemsSource="{Binding Items}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <luyao:VirtualizingWrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Width="100"
+                            Height="100"
+                            Margin="5"
+                            Background="LightBlue"
+                            BorderBrush="DarkBlue"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="{Binding}" />
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
