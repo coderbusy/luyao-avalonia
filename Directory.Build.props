@@ -1,7 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project>
     <PropertyGroup>
+        <!-- Version Information -->
+        <Version>0.2.0</Version>
+        
+        <!-- Common Package Metadata -->
+        <Authors>码农很忙</Authors>
+        <Company>码农很忙</Company>
+        <Copyright>Copyright © 2024 码农很忙</Copyright>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/coderbusy/luyao-avalonia</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/coderbusy/luyao-avalonia</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageTags>avalonia;avalonia-ui;controls;behaviors;fonts;ui-library</PackageTags>
+        
+        <!-- Build Configuration -->
         <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
         <AvaloniaVersion>11.3.7</AvaloniaVersion>
-		<Version>0.2.0</Version>
     </PropertyGroup>
+    
+    <!-- Include README.md in NuGet packages -->
+    <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\" Condition="'$(IsPackable)' != 'false'" />
+    </ItemGroup>
 </Project>
