@@ -77,8 +77,10 @@ public class VirtualizingWrapPanel : VirtualizingPanel
     private double _lastAvailableHeight = 0;
     private int _lastItemCount = 0;
     private readonly HashSet<int> _realizedIndexes = new();
-    private ScrollViewer? _scrollViewer;
     private Size _measuredItemSize = default(Size);
+    private Rect _viewport;
+    private Rect _extendedViewport;
+    private bool _isWaitingForViewportUpdate;
 
     private class LayoutInfo
     {
@@ -91,53 +93,44 @@ public class VirtualizingWrapPanel : VirtualizingPanel
         AffectsMeasure<VirtualizingWrapPanel>(OrientationProperty, ItemSizeProperty, StretchItemsProperty);
     }
 
-    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    public VirtualizingWrapPanel()
     {
-        base.OnAttachedToVisualTree(e);
-        UpdateScrollViewer();
+        EffectiveViewportChanged += OnEffectiveViewportChanged;
     }
 
-    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    private void OnEffectiveViewportChanged(object? sender, EffectiveViewportChangedEventArgs e)
     {
-        base.OnDetachedFromVisualTree(e);
-        UnsubscribeFromScrollViewer();
-    }
+        var isVertical = Orientation == Orientation.Vertical;
+        
+        // Update current viewport
+        _viewport = e.EffectiveViewport.Intersect(new Rect(Bounds.Size));
+        _isWaitingForViewportUpdate = false;
 
-    private void UpdateScrollViewer()
-    {
-        var newScrollViewer = this.FindAncestorOfType<ScrollViewer>();
-        if (newScrollViewer != _scrollViewer)
+        // Calculate extended viewport with buffer
+        var viewportSize = isVertical ? _viewport.Height : _viewport.Width;
+        var bufferSize = viewportSize; // 1x viewport size buffer on each side
+
+        if (isVertical)
         {
-            UnsubscribeFromScrollViewer();
-            _scrollViewer = newScrollViewer;
-            SubscribeToScrollViewer();
+            _extendedViewport = new Rect(
+                _viewport.X,
+                Math.Max(0, _viewport.Y - bufferSize),
+                _viewport.Width,
+                _viewport.Height + (2 * bufferSize)
+            );
         }
-    }
-
-    private void SubscribeToScrollViewer()
-    {
-        if (_scrollViewer != null)
+        else
         {
-            _scrollViewer.PropertyChanged += OnScrollViewerPropertyChanged;
+            _extendedViewport = new Rect(
+                Math.Max(0, _viewport.X - bufferSize),
+                _viewport.Y,
+                _viewport.Width + (2 * bufferSize),
+                _viewport.Height
+            );
         }
-    }
 
-    private void UnsubscribeFromScrollViewer()
-    {
-        if (_scrollViewer != null)
-        {
-            _scrollViewer.PropertyChanged -= OnScrollViewerPropertyChanged;
-            _scrollViewer = null;
-        }
-    }
-
-    private void OnScrollViewerPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
-    {
-        if (e.Property == ScrollViewer.OffsetProperty)
-        {
-            // Invalidate measure when scroll offset changes
-            InvalidateMeasure();
-        }
+        // Trigger remeasure with new viewport
+        InvalidateMeasure();
     }
 
     protected override Size MeasureOverride(Size availableSize)
@@ -148,6 +141,12 @@ public class VirtualizingWrapPanel : VirtualizingPanel
         if (items == null || items.Count == 0 || generator == null)
         {
             return new Size(0, 0);
+        }
+
+        // If we're bringing an item into view, ignore any layout passes until we receive a new viewport
+        if (_isWaitingForViewportUpdate)
+        {
+            return DesiredSize;
         }
 
         // Determine item size
@@ -202,8 +201,8 @@ public class VirtualizingWrapPanel : VirtualizingPanel
             }
         }
 
-        // Get viewport info for virtualization
-        var viewport = GetViewportInfo();
+        // Use extended viewport for virtualization - includes buffer zone
+        var viewport = _extendedViewport;
         var visibleRange = GetVisibleRange(viewport, isVertical);
 
         // Track which indexes should be realized
@@ -375,19 +374,16 @@ public class VirtualizingWrapPanel : VirtualizingPanel
         }
     }
 
-    private (int start, int count) GetVisibleRange(in (double offset, double viewport) viewportInfo, bool isVertical)
+    private (int start, int count) GetVisibleRange(Rect viewport, bool isVertical)
     {
         if (_layoutCache.Count == 0)
             return (0, 0);
 
-        var (offset, viewport) = viewportInfo;
         var start = -1;
         var end = -1;
 
-        // Add buffer zone (one viewport above/below or left/right)
-        var bufferZone = viewport;
-        var visibleStart = Math.Max(0, offset - bufferZone);
-        var visibleEnd = offset + viewport + bufferZone;
+        var visibleStart = isVertical ? viewport.Top : viewport.Left;
+        var visibleEnd = isVertical ? viewport.Bottom : viewport.Right;
 
         // Find first and last visible items
         for (int i = 0; i < _layoutCache.Count; i++)
@@ -408,19 +404,6 @@ public class VirtualizingWrapPanel : VirtualizingPanel
             return (0, 0);
 
         return (start, end - start + 1);
-    }
-
-    private (double offset, double viewport) GetViewportInfo()
-    {
-        var scrollViewer = this.FindAncestorOfType<ScrollViewer>();
-        if (scrollViewer != null)
-        {
-            var isVertical = Orientation == Orientation.Vertical;
-            return isVertical 
-                ? (scrollViewer.Offset.Y, scrollViewer.Viewport.Height)
-                : (scrollViewer.Offset.X, scrollViewer.Viewport.Width);
-        }
-        return (0, double.PositiveInfinity);
     }
 
     private int GetItemIndex(object? item)
