@@ -1,0 +1,105 @@
+<UserControl
+    x:Class="LuYao.Avalonia.Demo.Pages.UniformSpacingPanelPage"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:luyao="https://www.coderbusy.com/luyao"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:LuYao.Avalonia.Demo.ViewModels"
+    d:DesignHeight="600"
+    d:DesignWidth="800"
+    x:DataType="vm:UniformSpacingPanelViewModel"
+    mc:Ignorable="d">
+    <Design.DataContext>
+        <vm:UniformSpacingPanelViewModel />
+    </Design.DataContext>
+    
+    <Grid RowDefinitions="Auto,*">
+        <StackPanel Grid.Row="0" Margin="10" Spacing="10">
+            <TextBlock FontSize="16"
+                       FontWeight="Bold"
+                       Text="UniformSpacingPanel Demo" />
+            <TextBlock FontSize="12"
+                       Foreground="Gray"
+                       Text="A panel that arranges child elements with uniform spacing between them." />
+            
+            <StackPanel Orientation="Horizontal" Spacing="20" Margin="0,10,0,0">
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Orientation:" FontWeight="SemiBold" />
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <RadioButton Content="Vertical"
+                                     IsChecked="{Binding IsVertical}"
+                                     GroupName="Orientation" />
+                        <RadioButton Content="Horizontal"
+                                     IsChecked="{Binding !IsVertical}"
+                                     GroupName="Orientation" />
+                    </StackPanel>
+                </StackPanel>
+                
+                <StackPanel Spacing="5">
+                    <TextBlock Text="{Binding Spacing, StringFormat='Spacing: {0:F0}px'}" FontWeight="SemiBold" />
+                    <Slider Minimum="0"
+                            Maximum="50"
+                            Value="{Binding Spacing}"
+                            Width="200"
+                            TickFrequency="5"
+                            IsSnapToTickEnabled="True" />
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+        
+        <Border Grid.Row="1"
+                Margin="10"
+                Padding="10"
+                Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                BorderThickness="1"
+                CornerRadius="4">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto">
+                <luyao:UniformSpacingPanel Orientation="{Binding Orientation}"
+                                          Spacing="{Binding Spacing}">
+                    <Border Background="#FF6B9BD1"
+                            Padding="20,10"
+                            CornerRadius="4">
+                        <TextBlock Text="First Item"
+                                   Foreground="White"
+                                   FontWeight="SemiBold" />
+                    </Border>
+                    
+                    <Border Background="#FF7CB342"
+                            Padding="20,10"
+                            CornerRadius="4">
+                        <TextBlock Text="Second Item"
+                                   Foreground="White"
+                                   FontWeight="SemiBold" />
+                    </Border>
+                    
+                    <Border Background="#FFFFA726"
+                            Padding="20,10"
+                            CornerRadius="4">
+                        <TextBlock Text="Third Item"
+                                   Foreground="White"
+                                   FontWeight="SemiBold" />
+                    </Border>
+                    
+                    <Border Background="#FFEC407A"
+                            Padding="20,10"
+                            CornerRadius="4">
+                        <TextBlock Text="Fourth Item"
+                                   Foreground="White"
+                                   FontWeight="SemiBold" />
+                    </Border>
+                    
+                    <Border Background="#FFAB47BC"
+                            Padding="20,10"
+                            CornerRadius="4">
+                        <TextBlock Text="Fifth Item"
+                                   Foreground="White"
+                                   FontWeight="SemiBold" />
+                    </Border>
+                </luyao:UniformSpacingPanel>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>

@@ -65,6 +65,9 @@
                     <TabItem Header="VirtualizingWrapPanel">
                         <pages:VirtualizingWrapPanelPage />
                     </TabItem>
+                    <TabItem Header="UniformSpacingPanel">
+                        <pages:UniformSpacingPanelPage />
+                    </TabItem>
                 </TabControl>
             </TabItem>
         </TabControl>
