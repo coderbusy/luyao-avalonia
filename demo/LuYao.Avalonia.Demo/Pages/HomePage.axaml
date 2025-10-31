@@ -21,40 +21,10 @@
                 HorizontalAlignment="Center"
                 Text="A collection of useful controls for Avalonia UI" />
             
-            <TextBlock Text="Regular Flags (100x75):" FontWeight="Bold" Margin="0,20,0,0" />
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
-                <Image luyao:FlagIcon.Code="CN" Width="100" />
-                <Image luyao:FlagIcon.Code="US" Width="100" />
-                <Image luyao:FlagIcon.Code="GB" Width="100" />
-                <Image luyao:FlagIcon.Code="JP" Width="100" />
-            </StackPanel>
-            
-            <TextBlock Text="Small Flags (20x15):" FontWeight="Bold" />
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
-                <Image luyao:FlagIcon.Code="CN" Width="20" Height="15" />
-                <Image luyao:FlagIcon.Code="US" Width="20" Height="15" />
-                <Image luyao:FlagIcon.Code="GB" Width="20" Height="15" />
-                <Image luyao:FlagIcon.Code="JP" Width="20" Height="15" />
-                <Image luyao:FlagIcon.Code="FR" Width="20" Height="15" />
-                <Image luyao:FlagIcon.Code="DE" Width="20" Height="15" />
-                <Image luyao:FlagIcon.Code="IT" Width="20" Height="15" />
-                <Image luyao:FlagIcon.Code="ES" Width="20" Height="15" />
-            </StackPanel>
-            
-            <TextBlock Text="Mixed Sizes:" FontWeight="Bold" />
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
-                <Image luyao:FlagIcon.Code="CA" Width="50" />
-                <Image luyao:FlagIcon.Code="AU" Width="40" />
-                <Image luyao:FlagIcon.Code="IN" Width="30" />
-                <Image luyao:FlagIcon.Code="BR" Width="22" />
-            </StackPanel>
-            
-            <TextBlock Text="Fallback to XX for unknown codes:" FontWeight="Bold" />
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
-                <Image luyao:FlagIcon.Code="INVALID" Width="50" />
-                <Image luyao:FlagIcon.Code="ZZZ" Width="50" />
-                <Image luyao:FlagIcon.Code="" Width="50" />
-            </StackPanel>
+            <TextBlock
+                HorizontalAlignment="Center"
+                Margin="0,20,0,0"
+                Text="Please select a control from the left menu to see demos and examples." />
         </StackPanel>
     </ScrollViewer>
 </UserControl>
