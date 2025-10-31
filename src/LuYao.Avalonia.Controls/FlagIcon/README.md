@@ -5,8 +5,7 @@ FlagIcon provides flag icons for countries and regions as an attached property t
 ## Features
 
 - **Individual PNG files**: All 270+ flag images are stored as individual PNG files for maximum compatibility
-- **Dynamic scaling**: Images are automatically scaled based on display DPI and requested size
-- **Two modes**: Regular (100x75) and Small (thumbnail) modes available
+- **External scaling**: Scaling is handled by the Image control - set Width and Height as needed
 - **Easy to use**: Simple attached property syntax in XAML with string-based codes
 - **AOT-compatible**: No reflection used, fully compatible with Native AOT compilation
 - **Fallback support**: Unknown flag codes automatically display the "XX" (unknown) flag
@@ -20,13 +19,19 @@ FlagIcon provides flag icons for countries and regions as an attached property t
 <Image ly:FlagIcon.Code="US" Width="100" />
 ```
 
-### Using Small Flags
+### Controlling Size
 
-For smaller icons/thumbnails, use the `UseSmall` property:
+Control the size using the Image control's Width and Height properties:
 
 ```xaml
-<Image ly:FlagIcon.Code="CN" ly:FlagIcon.UseSmall="True" Width="20" />
-<Image ly:FlagIcon.Code="US" ly:FlagIcon.UseSmall="True" Width="20" />
+<!-- Large flags -->
+<Image ly:FlagIcon.Code="CN" Width="100" Height="75" />
+
+<!-- Small/thumbnail flags -->
+<Image ly:FlagIcon.Code="US" Width="20" Height="15" />
+
+<!-- Custom size - aspect ratio maintained by Image control -->
+<Image ly:FlagIcon.Code="GB" Width="50" />
 ```
 
 ### Handling Unknown Codes
@@ -50,9 +55,8 @@ Codes are case-insensitive.
 ## Implementation Details
 
 - Flag icons are loaded from individual PNG files on demand
-- Images are automatically scaled based on DPI and UseSmall property
 - Each flag PNG is 100x75 pixels at base resolution
-- When UseSmall is true, images are decoded to 20x15 effective size
+- Scaling is handled by the Image control itself
 - String-based codes provide flexibility and type safety
 - AOT-compatible without reflection
 
@@ -60,10 +64,12 @@ Codes are case-insensitive.
 
 If you were using the old sprite-based FlagIcon:
 
-The API remains the same - no code changes needed! The implementation now uses individual PNG files instead of sprite sheets for better compatibility and easier maintenance.
+The API has been simplified - the `UseSmall` property has been removed. Control sizing through the Image control's Width and Height properties:
 
 ```xaml
-<!-- Same usage as before -->
-<Image ly:FlagIcon.Code="CN" Width="100" />
-<Image ly:FlagIcon.Code="US" ly:FlagIcon.UseSmall="True" Width="20" />
+<!-- Before (with UseSmall) -->
+<Image ly:FlagIcon.Code="CN" ly:FlagIcon.UseSmall="True" Width="20" />
+
+<!-- After (without UseSmall) -->
+<Image ly:FlagIcon.Code="CN" Width="20" Height="15" />
 ```
