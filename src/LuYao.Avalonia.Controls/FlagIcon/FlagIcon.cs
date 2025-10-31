@@ -36,50 +36,65 @@ public class FlagIcon
         var smallDict = new Dictionary<FlagCode, IImage>();
 
         // Load regular sprite sheet
-        using (var ms = AssetLoader.Open(new Uri("avares://LuYao.Avalonia.Controls/Assets/Images/flags-sprite.png")))
-        {
-            var bmp = new Bitmap(ms);
-            var t = typeof(FlagCode);
-            foreach (var code in Enum.GetValues(typeof(FlagCode)))
-            {
-                var flagCode = (FlagCode)code;
-                string name = flagCode.ToString();
-                FieldInfo? field = t.GetField(name);
-                if (field == null) continue;
-                
-                var attr = field.GetCustomAttribute<FlagIconRectangleAttribute>();
-                if (attr == null) continue;
-                
-                var croppedBitmap = new CroppedBitmap(bmp, new PixelRect(attr.X, attr.Y, attr.Width, attr.Height));
-                regularDict[flagCode] = croppedBitmap;
-            }
-        }
+        LoadSpriteSheet(
+            "avares://LuYao.Avalonia.Controls/Assets/Images/flags-sprite.png",
+            regularDict,
+            (field) => field.GetCustomAttribute<FlagIconRectangleAttribute>()
+        );
 
         // Load small sprite sheet
-        using (var ms = AssetLoader.Open(new Uri("avares://LuYao.Avalonia.Controls/Assets/Images/flags-sprite-small.png")))
-        {
-            var bmp = new Bitmap(ms);
-            var t = typeof(FlagCode);
-            foreach (var code in Enum.GetValues(typeof(FlagCode)))
-            {
-                var flagCode = (FlagCode)code;
-                string name = flagCode.ToString();
-                FieldInfo? field = t.GetField(name);
-                if (field == null) continue;
-                
-                var attr = field.GetCustomAttribute<FlagIconSmallRectangleAttribute>();
-                if (attr == null) continue;
-                
-                var croppedBitmap = new CroppedBitmap(bmp, new PixelRect(attr.X, attr.Y, attr.Width, attr.Height));
-                smallDict[flagCode] = croppedBitmap;
-            }
-        }
+        LoadSpriteSheet(
+            "avares://LuYao.Avalonia.Controls/Assets/Images/flags-sprite-small.png",
+            smallDict,
+            (field) => field.GetCustomAttribute<FlagIconSmallRectangleAttribute>()
+        );
 
         RegularCache = regularDict;
         SmallCache = smallDict;
 
         CodeProperty.Changed.AddClassHandler<Image>(OnCodeChanged);
         UseSmallProperty.Changed.AddClassHandler<Image>(OnUseSmallChanged);
+    }
+
+    private static void LoadSpriteSheet<TAttribute>(
+        string spriteUri,
+        Dictionary<FlagCode, IImage> cache,
+        Func<FieldInfo, TAttribute?> getAttributeFunc) where TAttribute : class
+    {
+        using var ms = AssetLoader.Open(new Uri(spriteUri));
+        var bmp = new Bitmap(ms);
+        var flagType = typeof(FlagCode);
+        
+        foreach (var code in Enum.GetValues(typeof(FlagCode)))
+        {
+            var flagCode = (FlagCode)code;
+            string name = flagCode.ToString();
+            FieldInfo? field = flagType.GetField(name);
+            if (field == null) continue;
+            
+            var attr = getAttributeFunc(field);
+            if (attr == null) continue;
+            
+            // Extract coordinates from attribute (both attribute types have same properties)
+            int x = 0, y = 0, width = 0, height = 0;
+            if (attr is FlagIconRectangleAttribute regularAttr)
+            {
+                x = regularAttr.X;
+                y = regularAttr.Y;
+                width = regularAttr.Width;
+                height = regularAttr.Height;
+            }
+            else if (attr is FlagIconSmallRectangleAttribute smallAttr)
+            {
+                x = smallAttr.X;
+                y = smallAttr.Y;
+                width = smallAttr.Width;
+                height = smallAttr.Height;
+            }
+            
+            var croppedBitmap = new CroppedBitmap(bmp, new PixelRect(x, y, width, height));
+            cache[flagCode] = croppedBitmap;
+        }
     }
 
     /// <summary>
