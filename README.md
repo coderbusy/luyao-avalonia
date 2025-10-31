@@ -115,11 +115,11 @@ public static AppBuilder BuildAvaloniaApp()
 
 ```xml
 <Window xmlns="https://github.com/avaloniaui"
-        xmlns:ly="https://www.coderbusy.com/luyao">
+        xmlns:luyao="https://www.coderbusy.com/luyao">
     <StackPanel Orientation="Horizontal">
-        <ly:FlagIcon Code="CN" Width="32" />
-        <ly:FlagIcon Code="US" Width="32" />
-        <ly:FlagIcon Code="JP" Width="32" />
+        <luyao:FlagIcon Code="CN" Width="32" />
+        <luyao:FlagIcon Code="US" Width="32" />
+        <luyao:FlagIcon Code="JP" Width="32" />
     </StackPanel>
 </Window>
 ```
@@ -262,11 +262,11 @@ In XAML:
 
 ```xml
 <Window xmlns="https://github.com/avaloniaui"
-        xmlns:ly="https://www.coderbusy.com/luyao">
+        xmlns:luyao="https://www.coderbusy.com/luyao">
     <StackPanel Orientation="Horizontal">
-        <ly:FlagIcon Code="CN" Width="32" />
-        <ly:FlagIcon Code="US" Width="32" />
-        <ly:FlagIcon Code="JP" Width="32" />
+        <luyao:FlagIcon Code="CN" Width="32" />
+        <luyao:FlagIcon Code="US" Width="32" />
+        <luyao:FlagIcon Code="JP" Width="32" />
     </StackPanel>
 </Window>
 ```
