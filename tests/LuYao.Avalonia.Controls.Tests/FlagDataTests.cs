@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Avalonia;
 using Xunit;
 
@@ -10,11 +12,7 @@ public class FlagDataTests
     {
         // Act
         var flags = FlagData.GetRegularFlags();
-        var count = 0;
-        foreach (var _ in flags)
-        {
-            count++;
-        }
+        var count = flags.Count();
 
         // Assert
         Assert.Equal(272, count);
@@ -25,11 +23,7 @@ public class FlagDataTests
     {
         // Act
         var flags = FlagData.GetSmallFlags();
-        var count = 0;
-        foreach (var _ in flags)
-        {
-            count++;
-        }
+        var count = flags.Count();
 
         // Assert
         Assert.Equal(272, count);
